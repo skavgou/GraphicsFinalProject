@@ -2,10 +2,10 @@
 	"artifacts" : 
 	[
 		{
-			"path" : "lab4_character.exe"
+			"path" : "lab3_cornellbox.exe"
 		},
 		{
-			"path" : "lab4_character.pdb"
+			"path" : "lab3_cornellbox.pdb"
 		}
 	],
 	"backtrace" : 1,
@@ -29,19 +29,25 @@
 			{
 				"command" : 0,
 				"file" : 0,
-				"line" : 31,
+				"line" : 45,
 				"parent" : 0
 			},
 			{
 				"command" : 1,
 				"file" : 0,
-				"line" : 35,
+				"line" : 50,
 				"parent" : 0
 			},
 			{
 				"command" : 2,
 				"file" : 0,
-				"line" : 12,
+				"line" : 9,
+				"parent" : 0
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 13,
 				"parent" : 0
 			}
 		]
@@ -59,26 +65,30 @@
 			[
 				{
 					"backtrace" : 3,
+					"path" : "C:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/stb"
+				},
+				{
+					"backtrace" : 4,
 					"path" : "C:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glfw-3.1.2/include"
 				},
 				{
-					"backtrace" : 3,
+					"backtrace" : 4,
 					"path" : "C:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glm-0.9.7.1"
 				},
 				{
-					"backtrace" : 3,
+					"backtrace" : 4,
 					"path" : "C:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glad-opengl-3.3/include"
 				},
 				{
-					"backtrace" : 3,
+					"backtrace" : 4,
 					"path" : "C:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/tinygltf-2.9.3"
 				},
 				{
-					"backtrace" : 3,
+					"backtrace" : 4,
 					"path" : "C:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/FinalProject"
 				},
 				{
-					"backtrace" : 3,
+					"backtrace" : 4,
 					"path" : "C:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external"
 				},
 				{
@@ -98,7 +108,8 @@
 			"sourceIndexes" : 
 			[
 				0,
-				1
+				1,
+				2
 			]
 		}
 	],
@@ -113,7 +124,7 @@
 			"id" : "glfw::@160694664b387c03da1c"
 		}
 	],
-	"id" : "lab4_character::@6890427a1f51a3e7e1df",
+	"id" : "lab3_cornellbox::@6890427a1f51a3e7e1df",
 	"link" : 
 	{
 		"commandFragments" : 
@@ -158,8 +169,8 @@
 		],
 		"language" : "CXX"
 	},
-	"name" : "lab4_character",
-	"nameOnDisk" : "lab4_character.exe",
+	"name" : "lab3_cornellbox",
+	"nameOnDisk" : "lab3_cornellbox.exe",
 	"paths" : 
 	{
 		"build" : ".",
@@ -172,7 +183,8 @@
 			"sourceIndexes" : 
 			[
 				0,
-				1
+				1,
+				2
 			]
 		}
 	],
@@ -181,13 +193,19 @@
 		{
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
-			"path" : "FinalProject/lab4_character.cpp",
+			"path" : "FinalProject/lab3_cornellbox.cpp",
 			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
 			"path" : "FinalProject/render/shader.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "FinalProject/Building.cpp",
 			"sourceGroupIndex" : 0
 		}
 	],

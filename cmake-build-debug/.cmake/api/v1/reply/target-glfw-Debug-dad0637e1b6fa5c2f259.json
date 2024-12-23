@@ -24,6 +24,7 @@
 		"files" : 
 		[
 			"external/glfw-3.1.2/src/CMakeLists.txt",
+			"CMakeLists.txt",
 			"external/CMakeLists.txt"
 		],
 		"nodes" : 
@@ -57,6 +58,15 @@
 				"file" : 1,
 				"line" : 9,
 				"parent" : 4
+			},
+			{
+				"file" : 2
+			},
+			{
+				"command" : 3,
+				"file" : 2,
+				"line" : 9,
+				"parent" : 6
 			},
 			{
 				"command" : 3,
@@ -95,14 +105,18 @@
 			[
 				{
 					"backtrace" : 5,
+					"path" : "C:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/stb"
+				},
+				{
+					"backtrace" : 7,
 					"path" : "C:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glad-3.3/include"
 				},
 				{
-					"backtrace" : 6,
+					"backtrace" : 8,
 					"path" : "C:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glfw-3.1.2/src"
 				},
 				{
-					"backtrace" : 6,
+					"backtrace" : 8,
 					"path" : "C:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/cmake-build-debug/external/glfw-3.1.2/src"
 				}
 			],

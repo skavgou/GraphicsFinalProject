@@ -29,19 +29,25 @@
 			{
 				"command" : 0,
 				"file" : 0,
-				"line" : 21,
+				"line" : 23,
 				"parent" : 0
 			},
 			{
 				"command" : 1,
 				"file" : 0,
-				"line" : 25,
+				"line" : 27,
 				"parent" : 0
 			},
 			{
 				"command" : 2,
 				"file" : 0,
-				"line" : 12,
+				"line" : 9,
+				"parent" : 0
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 13,
 				"parent" : 0
 			}
 		]
@@ -59,26 +65,30 @@
 			[
 				{
 					"backtrace" : 3,
+					"path" : "C:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/stb"
+				},
+				{
+					"backtrace" : 4,
 					"path" : "C:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glfw-3.1.2/include"
 				},
 				{
-					"backtrace" : 3,
+					"backtrace" : 4,
 					"path" : "C:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glm-0.9.7.1"
 				},
 				{
-					"backtrace" : 3,
+					"backtrace" : 4,
 					"path" : "C:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glad-opengl-3.3/include"
 				},
 				{
-					"backtrace" : 3,
+					"backtrace" : 4,
 					"path" : "C:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/tinygltf-2.9.3"
 				},
 				{
-					"backtrace" : 3,
+					"backtrace" : 4,
 					"path" : "C:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/FinalProject"
 				},
 				{
-					"backtrace" : 3,
+					"backtrace" : 4,
 					"path" : "C:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external"
 				},
 				{

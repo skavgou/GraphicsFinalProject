@@ -52,14 +52,14 @@ build cmake_object_order_depends_target_lab4_skeleton: phony || cmake_object_ord
 build CMakeFiles/lab4_skeleton.dir/FinalProject/lab4_skeleton.cpp.obj: CXX_COMPILER__lab4_skeleton_unscanned_Debug C$:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/FinalProject/lab4_skeleton.cpp || cmake_object_order_depends_target_lab4_skeleton
   DEP_FILE = CMakeFiles\lab4_skeleton.dir\FinalProject\lab4_skeleton.cpp.obj.d
   FLAGS = -g -std=gnu++11 -fdiagnostics-color=always
-  INCLUDES = -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glfw-3.1.2/include -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glm-0.9.7.1 -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glad-opengl-3.3/include -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/tinygltf-2.9.3 -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/FinalProject -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glad-3.3/include
+  INCLUDES = -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/stb -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glfw-3.1.2/include -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glm-0.9.7.1 -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glad-opengl-3.3/include -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/tinygltf-2.9.3 -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/FinalProject -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glad-3.3/include
   OBJECT_DIR = CMakeFiles\lab4_skeleton.dir
   OBJECT_FILE_DIR = CMakeFiles\lab4_skeleton.dir\FinalProject
 
 build CMakeFiles/lab4_skeleton.dir/FinalProject/render/shader.cpp.obj: CXX_COMPILER__lab4_skeleton_unscanned_Debug C$:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/FinalProject/render/shader.cpp || cmake_object_order_depends_target_lab4_skeleton
   DEP_FILE = CMakeFiles\lab4_skeleton.dir\FinalProject\render\shader.cpp.obj.d
   FLAGS = -g -std=gnu++11 -fdiagnostics-color=always
-  INCLUDES = -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glfw-3.1.2/include -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glm-0.9.7.1 -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glad-opengl-3.3/include -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/tinygltf-2.9.3 -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/FinalProject -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glad-3.3/include
+  INCLUDES = -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/stb -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glfw-3.1.2/include -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glm-0.9.7.1 -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glad-opengl-3.3/include -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/tinygltf-2.9.3 -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/FinalProject -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glad-3.3/include
   OBJECT_DIR = CMakeFiles\lab4_skeleton.dir
   OBJECT_FILE_DIR = CMakeFiles\lab4_skeleton.dir\FinalProject\render
 
@@ -93,14 +93,14 @@ build cmake_object_order_depends_target_lab4_character: phony || cmake_object_or
 build CMakeFiles/lab4_character.dir/FinalProject/lab4_character.cpp.obj: CXX_COMPILER__lab4_character_unscanned_Debug C$:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/FinalProject/lab4_character.cpp || cmake_object_order_depends_target_lab4_character
   DEP_FILE = CMakeFiles\lab4_character.dir\FinalProject\lab4_character.cpp.obj.d
   FLAGS = -g -std=gnu++11 -fdiagnostics-color=always
-  INCLUDES = -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glfw-3.1.2/include -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glm-0.9.7.1 -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glad-opengl-3.3/include -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/tinygltf-2.9.3 -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/FinalProject -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glad-3.3/include
+  INCLUDES = -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/stb -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glfw-3.1.2/include -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glm-0.9.7.1 -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glad-opengl-3.3/include -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/tinygltf-2.9.3 -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/FinalProject -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glad-3.3/include
   OBJECT_DIR = CMakeFiles\lab4_character.dir
   OBJECT_FILE_DIR = CMakeFiles\lab4_character.dir\FinalProject
 
 build CMakeFiles/lab4_character.dir/FinalProject/render/shader.cpp.obj: CXX_COMPILER__lab4_character_unscanned_Debug C$:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/FinalProject/render/shader.cpp || cmake_object_order_depends_target_lab4_character
   DEP_FILE = CMakeFiles\lab4_character.dir\FinalProject\render\shader.cpp.obj.d
   FLAGS = -g -std=gnu++11 -fdiagnostics-color=always
-  INCLUDES = -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glfw-3.1.2/include -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glm-0.9.7.1 -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glad-opengl-3.3/include -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/tinygltf-2.9.3 -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/FinalProject -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glad-3.3/include
+  INCLUDES = -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/stb -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glfw-3.1.2/include -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glm-0.9.7.1 -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glad-opengl-3.3/include -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/tinygltf-2.9.3 -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/FinalProject -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glad-3.3/include
   OBJECT_DIR = CMakeFiles\lab4_character.dir
   OBJECT_FILE_DIR = CMakeFiles\lab4_character.dir\FinalProject\render
 
@@ -134,16 +134,23 @@ build cmake_object_order_depends_target_lab3_cornellbox: phony || cmake_object_o
 build CMakeFiles/lab3_cornellbox.dir/FinalProject/lab3_cornellbox.cpp.obj: CXX_COMPILER__lab3_cornellbox_unscanned_Debug C$:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/FinalProject/lab3_cornellbox.cpp || cmake_object_order_depends_target_lab3_cornellbox
   DEP_FILE = CMakeFiles\lab3_cornellbox.dir\FinalProject\lab3_cornellbox.cpp.obj.d
   FLAGS = -g -std=gnu++11 -fdiagnostics-color=always
-  INCLUDES = -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glfw-3.1.2/include -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glm-0.9.7.1 -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glad-opengl-3.3/include -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/tinygltf-2.9.3 -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/FinalProject -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glad-3.3/include
+  INCLUDES = -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/stb -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glfw-3.1.2/include -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glm-0.9.7.1 -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glad-opengl-3.3/include -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/tinygltf-2.9.3 -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/FinalProject -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glad-3.3/include
   OBJECT_DIR = CMakeFiles\lab3_cornellbox.dir
   OBJECT_FILE_DIR = CMakeFiles\lab3_cornellbox.dir\FinalProject
 
 build CMakeFiles/lab3_cornellbox.dir/FinalProject/render/shader.cpp.obj: CXX_COMPILER__lab3_cornellbox_unscanned_Debug C$:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/FinalProject/render/shader.cpp || cmake_object_order_depends_target_lab3_cornellbox
   DEP_FILE = CMakeFiles\lab3_cornellbox.dir\FinalProject\render\shader.cpp.obj.d
   FLAGS = -g -std=gnu++11 -fdiagnostics-color=always
-  INCLUDES = -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glfw-3.1.2/include -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glm-0.9.7.1 -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glad-opengl-3.3/include -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/tinygltf-2.9.3 -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/FinalProject -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glad-3.3/include
+  INCLUDES = -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/stb -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glfw-3.1.2/include -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glm-0.9.7.1 -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glad-opengl-3.3/include -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/tinygltf-2.9.3 -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/FinalProject -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glad-3.3/include
   OBJECT_DIR = CMakeFiles\lab3_cornellbox.dir
   OBJECT_FILE_DIR = CMakeFiles\lab3_cornellbox.dir\FinalProject\render
+
+build CMakeFiles/lab3_cornellbox.dir/FinalProject/Building.cpp.obj: CXX_COMPILER__lab3_cornellbox_unscanned_Debug C$:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/FinalProject/Building.cpp || cmake_object_order_depends_target_lab3_cornellbox
+  DEP_FILE = CMakeFiles\lab3_cornellbox.dir\FinalProject\Building.cpp.obj.d
+  FLAGS = -g -std=gnu++11 -fdiagnostics-color=always
+  INCLUDES = -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/stb -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glfw-3.1.2/include -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glm-0.9.7.1 -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glad-opengl-3.3/include -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/tinygltf-2.9.3 -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/FinalProject -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glad-3.3/include
+  OBJECT_DIR = CMakeFiles\lab3_cornellbox.dir
+  OBJECT_FILE_DIR = CMakeFiles\lab3_cornellbox.dir\FinalProject
 
 
 # =============================================================================
@@ -153,7 +160,7 @@ build CMakeFiles/lab3_cornellbox.dir/FinalProject/render/shader.cpp.obj: CXX_COM
 #############################################
 # Link the executable lab3_cornellbox.exe
 
-build lab3_cornellbox.exe: CXX_EXECUTABLE_LINKER__lab3_cornellbox_Debug CMakeFiles/lab3_cornellbox.dir/FinalProject/lab3_cornellbox.cpp.obj CMakeFiles/lab3_cornellbox.dir/FinalProject/render/shader.cpp.obj | glfw3dll.a libglad.dll.a || glfw3.dll libglad.dll
+build lab3_cornellbox.exe: CXX_EXECUTABLE_LINKER__lab3_cornellbox_Debug CMakeFiles/lab3_cornellbox.dir/FinalProject/lab3_cornellbox.cpp.obj CMakeFiles/lab3_cornellbox.dir/FinalProject/render/shader.cpp.obj CMakeFiles/lab3_cornellbox.dir/FinalProject/Building.cpp.obj | glfw3dll.a libglad.dll.a || glfw3.dll libglad.dll
   FLAGS = -g
   LINK_LIBRARIES = -lopengl32  -lglu32  glfw3dll.a  libglad.dll.a  -lopengl32  -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles\lab3_cornellbox.dir
@@ -175,14 +182,14 @@ build cmake_object_order_depends_target_lab2_building: phony || cmake_object_ord
 build CMakeFiles/lab2_building.dir/FinalProject/lab2_building.cpp.obj: CXX_COMPILER__lab2_building_unscanned_Debug C$:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/FinalProject/lab2_building.cpp || cmake_object_order_depends_target_lab2_building
   DEP_FILE = CMakeFiles\lab2_building.dir\FinalProject\lab2_building.cpp.obj.d
   FLAGS = -g -std=gnu++11 -fdiagnostics-color=always
-  INCLUDES = -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glfw-3.1.2/include -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glm-0.9.7.1 -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glad-opengl-3.3/include -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/tinygltf-2.9.3 -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/FinalProject -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glad-3.3/include
+  INCLUDES = -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/stb -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glfw-3.1.2/include -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glm-0.9.7.1 -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glad-opengl-3.3/include -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/tinygltf-2.9.3 -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/FinalProject -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glad-3.3/include
   OBJECT_DIR = CMakeFiles\lab2_building.dir
   OBJECT_FILE_DIR = CMakeFiles\lab2_building.dir\FinalProject
 
 build CMakeFiles/lab2_building.dir/FinalProject/render/shader.cpp.obj: CXX_COMPILER__lab2_building_unscanned_Debug C$:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/FinalProject/render/shader.cpp || cmake_object_order_depends_target_lab2_building
   DEP_FILE = CMakeFiles\lab2_building.dir\FinalProject\render\shader.cpp.obj.d
   FLAGS = -g -std=gnu++11 -fdiagnostics-color=always
-  INCLUDES = -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glfw-3.1.2/include -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glm-0.9.7.1 -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glad-opengl-3.3/include -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/tinygltf-2.9.3 -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/FinalProject -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glad-3.3/include
+  INCLUDES = -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/stb -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glfw-3.1.2/include -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glm-0.9.7.1 -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glad-opengl-3.3/include -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/tinygltf-2.9.3 -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/FinalProject -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glad-3.3/include
   OBJECT_DIR = CMakeFiles\lab2_building.dir
   OBJECT_FILE_DIR = CMakeFiles\lab2_building.dir\FinalProject\render
 
@@ -216,16 +223,23 @@ build cmake_object_order_depends_target_lab2_skybox: phony || cmake_object_order
 build CMakeFiles/lab2_skybox.dir/FinalProject/lab2_skybox.cpp.obj: CXX_COMPILER__lab2_skybox_unscanned_Debug C$:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/FinalProject/lab2_skybox.cpp || cmake_object_order_depends_target_lab2_skybox
   DEP_FILE = CMakeFiles\lab2_skybox.dir\FinalProject\lab2_skybox.cpp.obj.d
   FLAGS = -g -std=gnu++11 -fdiagnostics-color=always
-  INCLUDES = -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glfw-3.1.2/include -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glm-0.9.7.1 -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glad-opengl-3.3/include -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/tinygltf-2.9.3 -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/FinalProject -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glad-3.3/include
+  INCLUDES = -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/stb -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glfw-3.1.2/include -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glm-0.9.7.1 -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glad-opengl-3.3/include -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/tinygltf-2.9.3 -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/FinalProject -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glad-3.3/include
   OBJECT_DIR = CMakeFiles\lab2_skybox.dir
   OBJECT_FILE_DIR = CMakeFiles\lab2_skybox.dir\FinalProject
 
 build CMakeFiles/lab2_skybox.dir/FinalProject/render/shader.cpp.obj: CXX_COMPILER__lab2_skybox_unscanned_Debug C$:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/FinalProject/render/shader.cpp || cmake_object_order_depends_target_lab2_skybox
   DEP_FILE = CMakeFiles\lab2_skybox.dir\FinalProject\render\shader.cpp.obj.d
   FLAGS = -g -std=gnu++11 -fdiagnostics-color=always
-  INCLUDES = -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glfw-3.1.2/include -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glm-0.9.7.1 -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glad-opengl-3.3/include -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/tinygltf-2.9.3 -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/FinalProject -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glad-3.3/include
+  INCLUDES = -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/stb -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glfw-3.1.2/include -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glm-0.9.7.1 -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glad-opengl-3.3/include -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/tinygltf-2.9.3 -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/FinalProject -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glad-3.3/include
   OBJECT_DIR = CMakeFiles\lab2_skybox.dir
   OBJECT_FILE_DIR = CMakeFiles\lab2_skybox.dir\FinalProject\render
+
+build CMakeFiles/lab2_skybox.dir/FinalProject/Skybox.cpp.obj: CXX_COMPILER__lab2_skybox_unscanned_Debug C$:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/FinalProject/Skybox.cpp || cmake_object_order_depends_target_lab2_skybox
+  DEP_FILE = CMakeFiles\lab2_skybox.dir\FinalProject\Skybox.cpp.obj.d
+  FLAGS = -g -std=gnu++11 -fdiagnostics-color=always
+  INCLUDES = -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/stb -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glfw-3.1.2/include -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glm-0.9.7.1 -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glad-opengl-3.3/include -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/tinygltf-2.9.3 -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/FinalProject -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glad-3.3/include
+  OBJECT_DIR = CMakeFiles\lab2_skybox.dir
+  OBJECT_FILE_DIR = CMakeFiles\lab2_skybox.dir\FinalProject
 
 
 # =============================================================================
@@ -235,7 +249,7 @@ build CMakeFiles/lab2_skybox.dir/FinalProject/render/shader.cpp.obj: CXX_COMPILE
 #############################################
 # Link the executable lab2_skybox.exe
 
-build lab2_skybox.exe: CXX_EXECUTABLE_LINKER__lab2_skybox_Debug CMakeFiles/lab2_skybox.dir/FinalProject/lab2_skybox.cpp.obj CMakeFiles/lab2_skybox.dir/FinalProject/render/shader.cpp.obj | glfw3dll.a libglad.dll.a || glfw3.dll libglad.dll
+build lab2_skybox.exe: CXX_EXECUTABLE_LINKER__lab2_skybox_Debug CMakeFiles/lab2_skybox.dir/FinalProject/lab2_skybox.cpp.obj CMakeFiles/lab2_skybox.dir/FinalProject/render/shader.cpp.obj CMakeFiles/lab2_skybox.dir/FinalProject/Skybox.cpp.obj | glfw3dll.a libglad.dll.a || glfw3.dll libglad.dll
   FLAGS = -g
   LINK_LIBRARIES = -lopengl32  -lglu32  glfw3dll.a  libglad.dll.a  -lopengl32  -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles\lab2_skybox.dir
@@ -257,16 +271,30 @@ build cmake_object_order_depends_target_lab2: phony || cmake_object_order_depend
 build CMakeFiles/lab2.dir/FinalProject/lab2.cpp.obj: CXX_COMPILER__lab2_unscanned_Debug C$:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/FinalProject/lab2.cpp || cmake_object_order_depends_target_lab2
   DEP_FILE = CMakeFiles\lab2.dir\FinalProject\lab2.cpp.obj.d
   FLAGS = -g -std=gnu++11 -fdiagnostics-color=always
-  INCLUDES = -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glfw-3.1.2/include -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glm-0.9.7.1 -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glad-opengl-3.3/include -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/tinygltf-2.9.3 -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/FinalProject -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glad-3.3/include
+  INCLUDES = -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/stb -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glfw-3.1.2/include -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glm-0.9.7.1 -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glad-opengl-3.3/include -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/tinygltf-2.9.3 -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/FinalProject -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glad-3.3/include
   OBJECT_DIR = CMakeFiles\lab2.dir
   OBJECT_FILE_DIR = CMakeFiles\lab2.dir\FinalProject
 
 build CMakeFiles/lab2.dir/FinalProject/render/shader.cpp.obj: CXX_COMPILER__lab2_unscanned_Debug C$:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/FinalProject/render/shader.cpp || cmake_object_order_depends_target_lab2
   DEP_FILE = CMakeFiles\lab2.dir\FinalProject\render\shader.cpp.obj.d
   FLAGS = -g -std=gnu++11 -fdiagnostics-color=always
-  INCLUDES = -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glfw-3.1.2/include -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glm-0.9.7.1 -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glad-opengl-3.3/include -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/tinygltf-2.9.3 -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/FinalProject -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glad-3.3/include
+  INCLUDES = -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/stb -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glfw-3.1.2/include -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glm-0.9.7.1 -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glad-opengl-3.3/include -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/tinygltf-2.9.3 -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/FinalProject -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glad-3.3/include
   OBJECT_DIR = CMakeFiles\lab2.dir
   OBJECT_FILE_DIR = CMakeFiles\lab2.dir\FinalProject\render
+
+build CMakeFiles/lab2.dir/FinalProject/Building.cpp.obj: CXX_COMPILER__lab2_unscanned_Debug C$:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/FinalProject/Building.cpp || cmake_object_order_depends_target_lab2
+  DEP_FILE = CMakeFiles\lab2.dir\FinalProject\Building.cpp.obj.d
+  FLAGS = -g -std=gnu++11 -fdiagnostics-color=always
+  INCLUDES = -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/stb -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glfw-3.1.2/include -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glm-0.9.7.1 -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glad-opengl-3.3/include -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/tinygltf-2.9.3 -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/FinalProject -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glad-3.3/include
+  OBJECT_DIR = CMakeFiles\lab2.dir
+  OBJECT_FILE_DIR = CMakeFiles\lab2.dir\FinalProject
+
+build CMakeFiles/lab2.dir/FinalProject/Skybox.cpp.obj: CXX_COMPILER__lab2_unscanned_Debug C$:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/FinalProject/Skybox.cpp || cmake_object_order_depends_target_lab2
+  DEP_FILE = CMakeFiles\lab2.dir\FinalProject\Skybox.cpp.obj.d
+  FLAGS = -g -std=gnu++11 -fdiagnostics-color=always
+  INCLUDES = -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/stb -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glfw-3.1.2/include -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glm-0.9.7.1 -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glad-opengl-3.3/include -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/tinygltf-2.9.3 -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/FinalProject -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glad-3.3/include
+  OBJECT_DIR = CMakeFiles\lab2.dir
+  OBJECT_FILE_DIR = CMakeFiles\lab2.dir\FinalProject
 
 
 # =============================================================================
@@ -276,7 +304,7 @@ build CMakeFiles/lab2.dir/FinalProject/render/shader.cpp.obj: CXX_COMPILER__lab2
 #############################################
 # Link the executable lab2.exe
 
-build lab2.exe: CXX_EXECUTABLE_LINKER__lab2_Debug CMakeFiles/lab2.dir/FinalProject/lab2.cpp.obj CMakeFiles/lab2.dir/FinalProject/render/shader.cpp.obj | glfw3dll.a libglad.dll.a || glfw3.dll libglad.dll
+build lab2.exe: CXX_EXECUTABLE_LINKER__lab2_Debug CMakeFiles/lab2.dir/FinalProject/lab2.cpp.obj CMakeFiles/lab2.dir/FinalProject/render/shader.cpp.obj CMakeFiles/lab2.dir/FinalProject/Building.cpp.obj CMakeFiles/lab2.dir/FinalProject/Skybox.cpp.obj | glfw3dll.a libglad.dll.a || glfw3.dll libglad.dll
   FLAGS = -g
   LINK_LIBRARIES = -lopengl32  -lglu32  glfw3dll.a  libglad.dll.a  -lopengl32  -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles\lab2.dir
@@ -355,7 +383,7 @@ build external/glad-3.3/CMakeFiles/glad.dir/src/gl.c.obj: C_COMPILER__glad_unsca
   DEFINES = -Dglad_EXPORTS
   DEP_FILE = external\glad-3.3\CMakeFiles\glad.dir\src\gl.c.obj.d
   FLAGS = -g -fdiagnostics-color=always
-  INCLUDES = -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glad-3.3/include
+  INCLUDES = -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/stb -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glad-3.3/include
   OBJECT_DIR = external\glad-3.3\CMakeFiles\glad.dir
   OBJECT_FILE_DIR = external\glad-3.3\CMakeFiles\glad.dir\src
 
@@ -447,7 +475,7 @@ build external/glfw-3.1.2/src/CMakeFiles/glfw.dir/context.c.obj: C_COMPILER__glf
   DEFINES = -DUNICODE -DWINVER=0x0501 -D_GLFW_USE_CONFIG_H -Dglfw_EXPORTS
   DEP_FILE = external\glfw-3.1.2\src\CMakeFiles\glfw.dir\context.c.obj.d
   FLAGS = -g -fdiagnostics-color=always
-  INCLUDES = -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glad-3.3/include -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glfw-3.1.2/src -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/cmake-build-debug/external/glfw-3.1.2/src
+  INCLUDES = -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/stb -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glad-3.3/include -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glfw-3.1.2/src -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/cmake-build-debug/external/glfw-3.1.2/src
   OBJECT_DIR = external\glfw-3.1.2\src\CMakeFiles\glfw.dir
   OBJECT_FILE_DIR = external\glfw-3.1.2\src\CMakeFiles\glfw.dir
 
@@ -455,7 +483,7 @@ build external/glfw-3.1.2/src/CMakeFiles/glfw.dir/init.c.obj: C_COMPILER__glfw_u
   DEFINES = -DUNICODE -DWINVER=0x0501 -D_GLFW_USE_CONFIG_H -Dglfw_EXPORTS
   DEP_FILE = external\glfw-3.1.2\src\CMakeFiles\glfw.dir\init.c.obj.d
   FLAGS = -g -fdiagnostics-color=always
-  INCLUDES = -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glad-3.3/include -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glfw-3.1.2/src -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/cmake-build-debug/external/glfw-3.1.2/src
+  INCLUDES = -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/stb -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glad-3.3/include -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glfw-3.1.2/src -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/cmake-build-debug/external/glfw-3.1.2/src
   OBJECT_DIR = external\glfw-3.1.2\src\CMakeFiles\glfw.dir
   OBJECT_FILE_DIR = external\glfw-3.1.2\src\CMakeFiles\glfw.dir
 
@@ -463,7 +491,7 @@ build external/glfw-3.1.2/src/CMakeFiles/glfw.dir/input.c.obj: C_COMPILER__glfw_
   DEFINES = -DUNICODE -DWINVER=0x0501 -D_GLFW_USE_CONFIG_H -Dglfw_EXPORTS
   DEP_FILE = external\glfw-3.1.2\src\CMakeFiles\glfw.dir\input.c.obj.d
   FLAGS = -g -fdiagnostics-color=always
-  INCLUDES = -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glad-3.3/include -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glfw-3.1.2/src -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/cmake-build-debug/external/glfw-3.1.2/src
+  INCLUDES = -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/stb -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glad-3.3/include -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glfw-3.1.2/src -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/cmake-build-debug/external/glfw-3.1.2/src
   OBJECT_DIR = external\glfw-3.1.2\src\CMakeFiles\glfw.dir
   OBJECT_FILE_DIR = external\glfw-3.1.2\src\CMakeFiles\glfw.dir
 
@@ -471,7 +499,7 @@ build external/glfw-3.1.2/src/CMakeFiles/glfw.dir/monitor.c.obj: C_COMPILER__glf
   DEFINES = -DUNICODE -DWINVER=0x0501 -D_GLFW_USE_CONFIG_H -Dglfw_EXPORTS
   DEP_FILE = external\glfw-3.1.2\src\CMakeFiles\glfw.dir\monitor.c.obj.d
   FLAGS = -g -fdiagnostics-color=always
-  INCLUDES = -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glad-3.3/include -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glfw-3.1.2/src -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/cmake-build-debug/external/glfw-3.1.2/src
+  INCLUDES = -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/stb -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glad-3.3/include -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glfw-3.1.2/src -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/cmake-build-debug/external/glfw-3.1.2/src
   OBJECT_DIR = external\glfw-3.1.2\src\CMakeFiles\glfw.dir
   OBJECT_FILE_DIR = external\glfw-3.1.2\src\CMakeFiles\glfw.dir
 
@@ -479,7 +507,7 @@ build external/glfw-3.1.2/src/CMakeFiles/glfw.dir/window.c.obj: C_COMPILER__glfw
   DEFINES = -DUNICODE -DWINVER=0x0501 -D_GLFW_USE_CONFIG_H -Dglfw_EXPORTS
   DEP_FILE = external\glfw-3.1.2\src\CMakeFiles\glfw.dir\window.c.obj.d
   FLAGS = -g -fdiagnostics-color=always
-  INCLUDES = -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glad-3.3/include -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glfw-3.1.2/src -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/cmake-build-debug/external/glfw-3.1.2/src
+  INCLUDES = -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/stb -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glad-3.3/include -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glfw-3.1.2/src -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/cmake-build-debug/external/glfw-3.1.2/src
   OBJECT_DIR = external\glfw-3.1.2\src\CMakeFiles\glfw.dir
   OBJECT_FILE_DIR = external\glfw-3.1.2\src\CMakeFiles\glfw.dir
 
@@ -487,7 +515,7 @@ build external/glfw-3.1.2/src/CMakeFiles/glfw.dir/win32_init.c.obj: C_COMPILER__
   DEFINES = -DUNICODE -DWINVER=0x0501 -D_GLFW_USE_CONFIG_H -Dglfw_EXPORTS
   DEP_FILE = external\glfw-3.1.2\src\CMakeFiles\glfw.dir\win32_init.c.obj.d
   FLAGS = -g -fdiagnostics-color=always
-  INCLUDES = -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glad-3.3/include -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glfw-3.1.2/src -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/cmake-build-debug/external/glfw-3.1.2/src
+  INCLUDES = -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/stb -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glad-3.3/include -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glfw-3.1.2/src -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/cmake-build-debug/external/glfw-3.1.2/src
   OBJECT_DIR = external\glfw-3.1.2\src\CMakeFiles\glfw.dir
   OBJECT_FILE_DIR = external\glfw-3.1.2\src\CMakeFiles\glfw.dir
 
@@ -495,7 +523,7 @@ build external/glfw-3.1.2/src/CMakeFiles/glfw.dir/win32_monitor.c.obj: C_COMPILE
   DEFINES = -DUNICODE -DWINVER=0x0501 -D_GLFW_USE_CONFIG_H -Dglfw_EXPORTS
   DEP_FILE = external\glfw-3.1.2\src\CMakeFiles\glfw.dir\win32_monitor.c.obj.d
   FLAGS = -g -fdiagnostics-color=always
-  INCLUDES = -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glad-3.3/include -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glfw-3.1.2/src -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/cmake-build-debug/external/glfw-3.1.2/src
+  INCLUDES = -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/stb -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glad-3.3/include -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glfw-3.1.2/src -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/cmake-build-debug/external/glfw-3.1.2/src
   OBJECT_DIR = external\glfw-3.1.2\src\CMakeFiles\glfw.dir
   OBJECT_FILE_DIR = external\glfw-3.1.2\src\CMakeFiles\glfw.dir
 
@@ -503,7 +531,7 @@ build external/glfw-3.1.2/src/CMakeFiles/glfw.dir/win32_time.c.obj: C_COMPILER__
   DEFINES = -DUNICODE -DWINVER=0x0501 -D_GLFW_USE_CONFIG_H -Dglfw_EXPORTS
   DEP_FILE = external\glfw-3.1.2\src\CMakeFiles\glfw.dir\win32_time.c.obj.d
   FLAGS = -g -fdiagnostics-color=always
-  INCLUDES = -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glad-3.3/include -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glfw-3.1.2/src -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/cmake-build-debug/external/glfw-3.1.2/src
+  INCLUDES = -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/stb -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glad-3.3/include -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glfw-3.1.2/src -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/cmake-build-debug/external/glfw-3.1.2/src
   OBJECT_DIR = external\glfw-3.1.2\src\CMakeFiles\glfw.dir
   OBJECT_FILE_DIR = external\glfw-3.1.2\src\CMakeFiles\glfw.dir
 
@@ -511,7 +539,7 @@ build external/glfw-3.1.2/src/CMakeFiles/glfw.dir/win32_tls.c.obj: C_COMPILER__g
   DEFINES = -DUNICODE -DWINVER=0x0501 -D_GLFW_USE_CONFIG_H -Dglfw_EXPORTS
   DEP_FILE = external\glfw-3.1.2\src\CMakeFiles\glfw.dir\win32_tls.c.obj.d
   FLAGS = -g -fdiagnostics-color=always
-  INCLUDES = -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glad-3.3/include -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glfw-3.1.2/src -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/cmake-build-debug/external/glfw-3.1.2/src
+  INCLUDES = -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/stb -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glad-3.3/include -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glfw-3.1.2/src -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/cmake-build-debug/external/glfw-3.1.2/src
   OBJECT_DIR = external\glfw-3.1.2\src\CMakeFiles\glfw.dir
   OBJECT_FILE_DIR = external\glfw-3.1.2\src\CMakeFiles\glfw.dir
 
@@ -519,7 +547,7 @@ build external/glfw-3.1.2/src/CMakeFiles/glfw.dir/win32_window.c.obj: C_COMPILER
   DEFINES = -DUNICODE -DWINVER=0x0501 -D_GLFW_USE_CONFIG_H -Dglfw_EXPORTS
   DEP_FILE = external\glfw-3.1.2\src\CMakeFiles\glfw.dir\win32_window.c.obj.d
   FLAGS = -g -fdiagnostics-color=always
-  INCLUDES = -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glad-3.3/include -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glfw-3.1.2/src -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/cmake-build-debug/external/glfw-3.1.2/src
+  INCLUDES = -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/stb -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glad-3.3/include -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glfw-3.1.2/src -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/cmake-build-debug/external/glfw-3.1.2/src
   OBJECT_DIR = external\glfw-3.1.2\src\CMakeFiles\glfw.dir
   OBJECT_FILE_DIR = external\glfw-3.1.2\src\CMakeFiles\glfw.dir
 
@@ -527,7 +555,7 @@ build external/glfw-3.1.2/src/CMakeFiles/glfw.dir/winmm_joystick.c.obj: C_COMPIL
   DEFINES = -DUNICODE -DWINVER=0x0501 -D_GLFW_USE_CONFIG_H -Dglfw_EXPORTS
   DEP_FILE = external\glfw-3.1.2\src\CMakeFiles\glfw.dir\winmm_joystick.c.obj.d
   FLAGS = -g -fdiagnostics-color=always
-  INCLUDES = -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glad-3.3/include -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glfw-3.1.2/src -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/cmake-build-debug/external/glfw-3.1.2/src
+  INCLUDES = -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/stb -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glad-3.3/include -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glfw-3.1.2/src -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/cmake-build-debug/external/glfw-3.1.2/src
   OBJECT_DIR = external\glfw-3.1.2\src\CMakeFiles\glfw.dir
   OBJECT_FILE_DIR = external\glfw-3.1.2\src\CMakeFiles\glfw.dir
 
@@ -535,7 +563,7 @@ build external/glfw-3.1.2/src/CMakeFiles/glfw.dir/wgl_context.c.obj: C_COMPILER_
   DEFINES = -DUNICODE -DWINVER=0x0501 -D_GLFW_USE_CONFIG_H -Dglfw_EXPORTS
   DEP_FILE = external\glfw-3.1.2\src\CMakeFiles\glfw.dir\wgl_context.c.obj.d
   FLAGS = -g -fdiagnostics-color=always
-  INCLUDES = -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glad-3.3/include -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glfw-3.1.2/src -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/cmake-build-debug/external/glfw-3.1.2/src
+  INCLUDES = -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/stb -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glad-3.3/include -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glfw-3.1.2/src -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/cmake-build-debug/external/glfw-3.1.2/src
   OBJECT_DIR = external\glfw-3.1.2\src\CMakeFiles\glfw.dir
   OBJECT_FILE_DIR = external\glfw-3.1.2\src\CMakeFiles\glfw.dir
 

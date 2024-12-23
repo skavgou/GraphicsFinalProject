@@ -17,11 +17,13 @@
 		"commands" : 
 		[
 			"add_library",
+			"include_directories",
 			"target_include_directories"
 		],
 		"files" : 
 		[
-			"external/glad-3.3/CMakeLists.txt"
+			"external/glad-3.3/CMakeLists.txt",
+			"CMakeLists.txt"
 		],
 		"nodes" : 
 		[
@@ -35,7 +37,16 @@
 				"parent" : 0
 			},
 			{
+				"file" : 1
+			},
+			{
 				"command" : 1,
+				"file" : 1,
+				"line" : 9,
+				"parent" : 2
+			},
+			{
+				"command" : 2,
 				"file" : 0,
 				"line" : 6,
 				"parent" : 0
@@ -60,7 +71,11 @@
 			"includes" : 
 			[
 				{
-					"backtrace" : 2,
+					"backtrace" : 3,
+					"path" : "C:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/stb"
+				},
+				{
+					"backtrace" : 4,
 					"path" : "C:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glad-3.3/include"
 				}
 			],

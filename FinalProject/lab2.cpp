@@ -3,762 +3,296 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-#include <render/shader.h>
-
-#define STB_IMAGE_IMPLEMENTATION
-#include <stb/stb_image.h>
-
 #include <vector>
 #include <iostream>
-#define _USE_MATH_DEFINES
-#include <math.h>
+#include <cstdlib>
+#include <ctime>
+#include "Building.h"
+#include "render/shader.h"
 
+GLuint boxShaderID;
+GLuint buildingTex1;
+GLuint buildingTex2;
+GLuint buildingTex3;
+GLuint buildingTex4;
+GLuint buildingTex5;
+GLuint buildingTex6;
 
-static GLFWwindow *window;
-static void key_callback(GLFWwindow *window, int key, int scancode, int action, int mode);
+// Function prototypes
+void key_callback(GLFWwindow *window, int key, int scancode, int action, int mode);
+void mouse_callback(GLFWwindow *window, double xpos, double ypos);
 
 // OpenGL camera view parameters
-static glm::vec3 eye_center;
+static glm::vec3 eye_center(0, 0, 500);
 static glm::vec3 lookat(0, 0, 0);
 static glm::vec3 up(0, 1, 0);
+static glm::vec3 cameraDirection = glm::normalize(lookat - eye_center);
 
-// View control
+// Camera movement parameters
 static float viewAzimuth = 0.f;
 static float viewPolar = 0.f;
 static float viewDistance = 500.0f;
+static float cameraSpeed = 10.0f;
 
-static GLuint LoadTextureTileBox(const char *texture_file_path) {
-    int w, h, channels;
-    uint8_t* img = stbi_load(texture_file_path, &w, &h, &channels, 3);
-    GLuint texture;
-    glGenTextures(1, &texture);
-    glBindTexture(GL_TEXTURE_2D, texture);
+// Mouse state
+static bool firstMouse = true;
+static float lastX = 512, lastY = 384; // Assume window center
+static float yaw = -90.0f; // Yaw starts facing down -Z axis
+static float pitch = 0.0f;
 
-    // To tile textures on a box, we set wrapping to repeat
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+// Tile structure
+struct Tile {
+    std::vector<Building> buildings;
+    glm::vec3 position; // Position of the tile
+};
 
-    if (img) {
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_RGB, GL_UNSIGNED_BYTE, img);
-        glGenerateMipmap(GL_TEXTURE_2D);
-    } else {
-        std::cout << "Failed to load texture " << texture_file_path << std::endl;
+GLuint toTexID(int texID) {
+    GLuint textureID;
+    switch (texID) {
+        case 1: textureID = buildingTex1; break;
+        case 2: textureID = buildingTex2; break;
+        case 3: textureID = buildingTex3; break;
+        case 4: textureID = buildingTex4; break;
+        case 5: textureID = buildingTex5; break;
+        case 6: textureID = buildingTex6; break;
+        default: textureID = buildingTex4; break;
     }
-    stbi_image_free(img);
-
-    return texture;
+    return textureID;
 }
 
-struct Building {
-	glm::vec3 position;		// Position of the box
-	glm::vec3 scale;		// Size of the box in each axis
-
-	GLfloat vertex_buffer_data[72] = {	// Vertex definition for a canonical box
-		// Front face
-		-1.0f, -1.0f, 1.0f,
-		1.0f, -1.0f, 1.0f,
-		1.0f, 1.0f, 1.0f,
-		-1.0f, 1.0f, 1.0f,
-
-		// Back face
-		1.0f, -1.0f, -1.0f,
-		-1.0f, -1.0f, -1.0f,
-		-1.0f, 1.0f, -1.0f,
-		1.0f, 1.0f, -1.0f,
-
-		// Left face
-		-1.0f, -1.0f, -1.0f,
-		-1.0f, -1.0f, 1.0f,
-		-1.0f, 1.0f, 1.0f,
-		-1.0f, 1.0f, -1.0f,
-
-		// Right face
-		1.0f, -1.0f, 1.0f,
-		1.0f, -1.0f, -1.0f,
-		1.0f, 1.0f, -1.0f,
-		1.0f, 1.0f, 1.0f,
-
-		// Top face
-		-1.0f, 1.0f, 1.0f,
-		1.0f, 1.0f, 1.0f,
-		1.0f, 1.0f, -1.0f,
-		-1.0f, 1.0f, -1.0f,
-
-		// Bottom face
-		-1.0f, -1.0f, -1.0f,
-		1.0f, -1.0f, -1.0f,
-		1.0f, -1.0f, 1.0f,
-		-1.0f, -1.0f, 1.0f,
-	};
-
-	GLfloat color_buffer_data[72] = {
-		// Front, red
-		1.0f, 0.0f, 0.0f,
-		1.0f, 0.0f, 0.0f,
-		1.0f, 0.0f, 0.0f,
-		1.0f, 0.0f, 0.0f,
-
-		// Back, yellow
-		1.0f, 1.0f, 0.0f,
-		1.0f, 1.0f, 0.0f,
-		1.0f, 1.0f, 0.0f,
-		1.0f, 1.0f, 0.0f,
-
-		// Left, green
-		0.0f, 1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f,
-
-		// Right, cyan
-		0.0f, 1.0f, 1.0f,
-		0.0f, 1.0f, 1.0f,
-		0.0f, 1.0f, 1.0f,
-		0.0f, 1.0f, 1.0f,
-
-		// Top, blue
-		0.0f, 0.0f, 1.0f,
-		0.0f, 0.0f, 1.0f,
-		0.0f, 0.0f, 1.0f,
-		0.0f, 0.0f, 1.0f,
-
-		// Bottom, magenta
-		1.0f, 0.0f, 1.0f,
-		1.0f, 0.0f, 1.0f,
-		1.0f, 0.0f, 1.0f,
-		1.0f, 0.0f, 1.0f,
-	};
-
-	GLuint index_buffer_data[36] = {		// 12 triangle faces of a box
-		0, 1, 2,
-		0, 2, 3,
-
-		4, 5, 6,
-		4, 6, 7,
-
-		8, 9, 10,
-		8, 10, 11,
-
-		12, 13, 14,
-		12, 14, 15,
-
-		16, 17, 18,
-		16, 18, 19,
-
-		20, 21, 22,
-		20, 22, 23,
-	};
-
-    // TODO: Define UV buffer data
-    // ---------------------------
-    GLfloat uv_buffer_data[48] = {
-            // Front
-            0.0f, 1.0f,
-            1.0f, 1.0f,
-            1.0f, 0.0f,
-            0.0f, 0.0f,
-            // Back
-            0.0f, 1.0f,
-            1.0f, 1.0f,
-            1.0f, 0.0f,
-            0.0f, 0.0f,
-            // Left
-            0.0f, 1.0f,
-            1.0f, 1.0f,
-            1.0f, 0.0f,
-            0.0f, 0.0f,
-
-            // Right
-            0.0f, 1.0f,
-            1.0f, 1.0f,
-            1.0f, 0.0f,
-            0.0f, 0.0f,
-            // Top - we do not want texture the top
-            0.0f, 0.0f,
-            0.0f, 0.0f,
-            0.0f, 0.0f,
-            0.0f, 0.0f,
-            // Bottom - we do not want texture the bottom
-            0.0f, 0.0f,
-            0.0f, 0.0f,
-            0.0f, 0.0f,
-            0.0f, 0.0f,
-    };
-    // ---------------------------
-
-	// OpenGL buffers
-	GLuint vertexArrayID;
-	GLuint vertexBufferID;
-	GLuint indexBufferID;
-	GLuint colorBufferID;
-	GLuint uvBufferID;
-	GLuint textureID;
-
-	// Shader variable IDs
-	GLuint mvpMatrixID;
-	GLuint textureSamplerID;
-	GLuint programID;
-
-	void initialize(glm::vec3 position, glm::vec3 scale, int texID) {
-		// Define scale of the building geometry
-		this->position = position;
-		this->scale = scale;
-
-		// Create a vertex array object
-		glGenVertexArrays(1, &vertexArrayID);
-		glBindVertexArray(vertexArrayID);
-
-		// Create a vertex buffer object to store the vertex data
-		glGenBuffers(1, &vertexBufferID);
-		glBindBuffer(GL_ARRAY_BUFFER, vertexBufferID);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(vertex_buffer_data), vertex_buffer_data, GL_STATIC_DRAW);
-
-		// Create a vertex buffer object to store the color data
-        // TODO:
-		glGenBuffers(1, &colorBufferID);
-		glBindBuffer(GL_ARRAY_BUFFER, colorBufferID);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(color_buffer_data), color_buffer_data, GL_STATIC_DRAW);
-
-        for (int i = 0; i < 24; ++i) uv_buffer_data[2*i+1] *= scale[2] / 10;
-
-		// TODO: Create a vertex buffer object to store the UV data
-		// --------------------------------------------------------
-        // Create a vertex buffer object to store the UV data
-        glGenBuffers(1, &uvBufferID);
-        glBindBuffer(GL_ARRAY_BUFFER, uvBufferID);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(uv_buffer_data), uv_buffer_data,
-                     GL_STATIC_DRAW);
-        // --------------------------------------------------------
-
-		// Create an index buffer object to store the index data that defines triangle faces
-		glGenBuffers(1, &indexBufferID);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBufferID);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(index_buffer_data), index_buffer_data, GL_STATIC_DRAW);
-
-		// Create and compile our GLSL program from the shaders
-		programID = LoadShadersFromFile("../FinalProject/shader/box.vert", "../FinalProject/shader/box.frag");
-		if (programID == 0)
-		{
-			std::cerr << "Failed to load shaders." << std::endl;
-		}
-
-		// Get a handle for our "MVP" uniform
-		mvpMatrixID = glGetUniformLocation(programID, "MVP");
-
-        switch(texID) {
-            case 1:
-                textureID = LoadTextureTileBox("../FinalProject/Textures/facade4.jpg");
-                break;
-            case 2:
-                textureID = LoadTextureTileBox("../FinalProject/Textures/facade3.jpg");
-                break;
-            case 3:
-                textureID = LoadTextureTileBox("../FinalProject/Textures/facade2.jpg");
-                break;
-            case 4:
-                textureID = LoadTextureTileBox("../FinalProject/Textures/facade1.jpg");
-                break;
-            case 5:
-                textureID = LoadTextureTileBox("../FinalProject/Textures/facade0.jpg");
-                break;
-            case 6:
-                textureID = LoadTextureTileBox("../FinalProject/Textures/facade5.jpg");
-                break;
-            default:
-                textureID = LoadTextureTileBox("../FinalProject/Textures/facade5.jpg");
-                break;
-        }
-
-        // TODO: Load a texture
-        // --------------------
-        //textureID = LoadTextureTileBox("../lab2/facade4.jpg");
-        // --------------------
-
-        // TODO: Get a handle to texture sampler
-        // -------------------------------------
-        // Get a handle for our "textureSampler" uniform
-        textureSamplerID = glGetUniformLocation(programID,"textureSampler");
-        // -------------------------------------
-	}
-
-	void render(glm::mat4 cameraMatrix) {
-		glUseProgram(programID);
-
-		glEnableVertexAttribArray(0);
-		glBindBuffer(GL_ARRAY_BUFFER, vertexBufferID);
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
-
-		glEnableVertexAttribArray(1);
-		glBindBuffer(GL_ARRAY_BUFFER, colorBufferID);
-		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
-
-		// Enable UV buffer and texture sampler
-		glEnableVertexAttribArray(2);
-		glBindBuffer(GL_ARRAY_BUFFER, uvBufferID);
-		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, 0);
-
-		// Set texture sampler to use texture unit 0
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, textureID);
-		glUniform1i(textureSamplerID, 0);
-
-		// Model transform
-		glm::mat4 modelMatrix = glm::mat4();
-		modelMatrix = glm::translate(modelMatrix, position);
-		modelMatrix = glm::scale(modelMatrix, scale);
-
-		// Set model-view-projection matrix
-		glm::mat4 mvp = cameraMatrix * modelMatrix;
-		glUniformMatrix4fv(mvpMatrixID, 1, GL_FALSE, &mvp[0][0]);
-
-		// Draw the box
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBufferID);
-		glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, (void*)0);
-
-		glDisableVertexAttribArray(0);
-		glDisableVertexAttribArray(1);
-		glDisableVertexAttribArray(2);
-	}
-
-
-	void cleanup() {
-		glDeleteBuffers(1, &vertexBufferID);
-		glDeleteBuffers(1, &colorBufferID);
-		glDeleteBuffers(1, &indexBufferID);
-		glDeleteVertexArrays(1, &vertexArrayID);
-		//glDeleteBuffers(1, &uvBufferID);
-		//glDeleteTextures(1, &textureID);
-		glDeleteProgram(programID);
-	}
-};
-
-struct Skybox {
-    glm::vec3 position;		// Position of the box
-    glm::vec3 scale;		// Size of the box in each axis
-
-    GLfloat vertex_buffer_data[72] = {	// Vertex definition for a canonical box
-            // Front face
-            -1.0f, -1.0f, 1.0f,
-            1.0f, -1.0f, 1.0f,
-            1.0f, 1.0f, 1.0f,
-            -1.0f, 1.0f, 1.0f,
-
-            // Back face
-            1.0f, -1.0f, -1.0f,
-            -1.0f, -1.0f, -1.0f,
-            -1.0f, 1.0f, -1.0f,
-            1.0f, 1.0f, -1.0f,
-
-            // Left face
-            -1.0f, -1.0f, -1.0f,
-            -1.0f, -1.0f, 1.0f,
-            -1.0f, 1.0f, 1.0f,
-            -1.0f, 1.0f, -1.0f,
-
-            // Right face
-            1.0f, -1.0f, 1.0f,
-            1.0f, -1.0f, -1.0f,
-            1.0f, 1.0f, -1.0f,
-            1.0f, 1.0f, 1.0f,
-
-            // Top face
-            -1.0f, 1.0f, 1.0f,
-            1.0f, 1.0f, 1.0f,
-            1.0f, 1.0f, -1.0f,
-            -1.0f, 1.0f, -1.0f,
-
-            // Bottom face
-            -1.0f, -1.0f, -1.0f,
-            1.0f, -1.0f, -1.0f,
-            1.0f, -1.0f, 1.0f,
-            -1.0f, -1.0f, 1.0f,
-    };
-
-    GLfloat color_buffer_data[72] = {
-            // Front, red
-            1.0f, 0.0f, 0.0f,
-            1.0f, 0.0f, 0.0f,
-            1.0f, 0.0f, 0.0f,
-            1.0f, 0.0f, 0.0f,
-
-            // Back, yellow
-            1.0f, 1.0f, 0.0f,
-            1.0f, 1.0f, 0.0f,
-            1.0f, 1.0f, 0.0f,
-            1.0f, 1.0f, 0.0f,
-
-            // Left, green
-            0.0f, 1.0f, 0.0f,
-            0.0f, 1.0f, 0.0f,
-            0.0f, 1.0f, 0.0f,
-            0.0f, 1.0f, 0.0f,
-
-            // Right, cyan
-            0.0f, 1.0f, 1.0f,
-            0.0f, 1.0f, 1.0f,
-            0.0f, 1.0f, 1.0f,
-            0.0f, 1.0f, 1.0f,
-
-            // Top, blue
-            0.0f, 0.0f, 1.0f,
-            0.0f, 0.0f, 1.0f,
-            0.0f, 0.0f, 1.0f,
-            0.0f, 0.0f, 1.0f,
-
-            // Bottom, magenta
-            1.0f, 0.0f, 1.0f,
-            1.0f, 0.0f, 1.0f,
-            1.0f, 0.0f, 1.0f,
-            1.0f, 0.0f, 1.0f,
-    };
-
-    GLuint index_buffer_data[36] = {		// 12 triangle faces of a box
-            0, 1, 2,
-            0, 2, 3,
-
-            4, 5, 6,
-            4, 6, 7,
-
-            8, 9, 10,
-            8, 10, 11,
-
-            12, 13, 14,
-            12, 14, 15,
-
-            16, 17, 18,
-            16, 18, 19,
-
-            20, 21, 22,
-            20, 22, 23,
-    };
-
-    // TODO: Define UV buffer data
-    // ---------------------------
-    GLfloat uv_buffer_data[48] = {
-        // Neg X :)
-        0.75f, 1.0f / 3.0f,
-        0.5f, 1.0f / 3.0f,
-        0.5f, 2.0f / 3.0f,
-        0.75f, 2.0f / 3.0f,
-        // Pos X :)
-        0.25f, 1.0f / 3.0f,
-        0.0f, 1.0f / 3.0f,
-        0.0f, 2.0f / 3.0f,
-        0.25f, 2.0f / 3.0f,
-        // Neg Z
-        1.0f, 1.0f / 3.0f,
-        0.75f, 1.0f / 3.0f,
-        0.75f, 2.0f / 3.0f,
-        1.0f, 2.0f / 3.0f,
-        // Pos Z :)
-        0.5f, 1.0f / 3.0f,
-        0.25f, 1.0f / 3.0f,
-        0.25f, 2.0f / 3.0f,
-        0.5f, 2.0f / 3.0f,
-        // Neg Y
-
-        0.5f, 1.0f,
-        0.5f, 2.0f / 3.0f,
-        0.25f, 2.0f / 3.0f,
-        0.25f, 1.0f,
-
-        // Pos Y
-        0.25f, 0.0f,
-        0.25f, 1.0f / 3.0f,
-        0.5f, 1.0f / 3.0f,
-        0.5f, 0.0f,
-
-    };
-    // ---------------------------
-
-    // OpenGL buffers
-    GLuint vertexArrayID;
-    GLuint vertexBufferID;
-    GLuint indexBufferID;
-    GLuint colorBufferID;
-    GLuint uvBufferID;
-    GLuint textureID;
-
-    // Shader variable IDs
-    GLuint mvpMatrixID;
-    GLuint textureSamplerID;
-    GLuint programID;
-
-    void initialize(glm::vec3 position, glm::vec3 scale) {
-        // Define scale of the building geometry
-        this->position = position;
-        this->scale = scale;
-
-        // Create a vertex array object
-        glGenVertexArrays(1, &vertexArrayID);
-        glBindVertexArray(vertexArrayID);
-
-        // Create a vertex buffer object to store the vertex data
-        glGenBuffers(1, &vertexBufferID);
-        glBindBuffer(GL_ARRAY_BUFFER, vertexBufferID);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(vertex_buffer_data), vertex_buffer_data, GL_STATIC_DRAW);
-
-        // Create a vertex buffer object to store the color data
-        // TODO:
-        glGenBuffers(1, &colorBufferID);
-        glBindBuffer(GL_ARRAY_BUFFER, colorBufferID);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(color_buffer_data), color_buffer_data, GL_STATIC_DRAW);
-
-        //for (int i = 0; i < 24; ++i) uv_buffer_data[2*i+1] *= 3;
-
-        // TODO: Create a vertex buffer object to store the UV data
-        // --------------------------------------------------------
-        // Create a vertex buffer object to store the UV data
-        glGenBuffers(1, &uvBufferID);
-        glBindBuffer(GL_ARRAY_BUFFER, uvBufferID);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(uv_buffer_data), uv_buffer_data,
-                     GL_STATIC_DRAW);
-        // --------------------------------------------------------
-
-        // Create an index buffer object to store the index data that defines triangle faces
-        glGenBuffers(1, &indexBufferID);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBufferID);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(index_buffer_data), index_buffer_data, GL_STATIC_DRAW);
-
-        // Create and compile our GLSL program from the shaders
-        programID = LoadShadersFromFile("../FinalProject/shader/box.vert", "../FinalProject/shader/box.frag");
-        if (programID == 0)
-        {
-            std::cerr << "Failed to load shaders." << std::endl;
-        }
-
-        // Get a handle for our "MVP" uniform
-        mvpMatrixID = glGetUniformLocation(programID, "MVP");
-
-        // TODO: Load a texture
-        // --------------------
-        textureID = LoadTextureTileBox("../FinalProject/Textures/sky.png");
-        // --------------------
-
-        // TODO: Get a handle to texture sampler
-        // -------------------------------------
-        // Get a handle for our "textureSampler" uniform
-        textureSamplerID = glGetUniformLocation(programID,"textureSampler");
-        // -------------------------------------
-    }
-
-    void render(glm::mat4 cameraMatrix) {
-        glUseProgram(programID);
-
-        glEnableVertexAttribArray(0);
-        glBindBuffer(GL_ARRAY_BUFFER, vertexBufferID);
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
-
-        glEnableVertexAttribArray(1);
-        glBindBuffer(GL_ARRAY_BUFFER, colorBufferID);
-        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
-
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBufferID);
-
-        // TODO: Model transform
-        // -----------------------
-        glm::mat4 modelMatrix = glm::mat4();
-        // Translate the building to its position
-        modelMatrix = glm::translate(modelMatrix, position);
-        // Scale the box along each axis to make it look like a building
-        modelMatrix = glm::scale(modelMatrix, scale);
-        // -----------------------
-
-        // Set model-view-projection matrix
-        glm::mat4 mvp = cameraMatrix * modelMatrix;
-        glUniformMatrix4fv(mvpMatrixID, 1, GL_FALSE, &mvp[0][0]);
-
-        // TODO: Enable UV buffer and texture sampler
-        // ------------------------------------------
-        glEnableVertexAttribArray(2);
-        glBindBuffer(GL_ARRAY_BUFFER, uvBufferID);
-        glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, 0);
-        // Set textureSampler to use texture unit 0
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, textureID);
-        glUniform1i(textureSamplerID, 0);
-
-        // ------------------------------------------
-
-        // Draw the box
-        glDrawElements(
-                GL_TRIANGLES,      // mode
-                36,    			   // number of indices
-                GL_UNSIGNED_INT,   // type
-                (void*)0           // element array buffer offset
-        );
-
-        glDisableVertexAttribArray(0);
-        glDisableVertexAttribArray(1);
-        //glDisableVertexAttribArray(2);
-    }
-
-    void cleanup() {
-        glDeleteBuffers(1, &vertexBufferID);
-        glDeleteBuffers(1, &colorBufferID);
-        glDeleteBuffers(1, &indexBufferID);
-        glDeleteVertexArrays(1, &vertexArrayID);
-        //glDeleteBuffers(1, &uvBufferID);
-        //glDeleteTextures(1, &textureID);
-        glDeleteProgram(programID);
-    }
-};
-
-int main(void)
-{
-	// Initialise GLFW
-	if (!glfwInit())
-	{
-		std::cerr << "Failed to initialize GLFW." << std::endl;
-		return -1;
-	}
-
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // For MacOS
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
-	// Open a window and create its OpenGL context
-	window = glfwCreateWindow(1024, 768, "Lab 2", NULL, NULL);
-	if (window == NULL)
-	{
-		std::cerr << "Failed to open a GLFW window." << std::endl;
-		glfwTerminate();
-		return -1;
-	}
-	glfwMakeContextCurrent(window);
-
-	// Ensure we can capture the escape key being pressed below
-	glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
-	glfwSetKeyCallback(window, key_callback);
-
-	// Load OpenGL functions, gladLoadGL returns the loaded version, 0 on error.
-	int version = gladLoadGL(glfwGetProcAddress);
-	if (version == 0)
-	{
-		std::cerr << "Failed to initialize OpenGL context." << std::endl;
-		return -1;
-	}
-
-	// Background
-	glClearColor(0.2f, 0.2f, 0.25f, 0.0f);
-
-	glEnable(GL_DEPTH_TEST);
-	glEnable(GL_CULL_FACE);
-
-
-    std::vector<Building> buildings;
-
-	// TODO: Create more buildings
-    // ---------------------------
-	Building central;
-	central.initialize(glm::vec3(200, 80, 200), glm::vec3(30, 80, 30), 1);
-    buildings.push_back(central);
-    // ---------------------------
-
-
-    for (int i = 0; i < 9; i++) {
-        for (int j = 0; j < 9; j++) {
+// Function to create a grid of buildings
+void createGridLayout(std::vector<Building> &buildings, int rows, int cols, int spacing) {
+    for (int i = 0; i < rows; ++i) {
+        for (int j = 0; j < cols; ++j) {
             Building b;
-            if (i != 4 || j != 4){
-                int yScale = (rand() % 100) / 5 + 10;
-                b.initialize(glm::vec3(i*50, yScale, j*50),
-                             glm::vec3((rand() % 100) / 8 + 12, yScale, (rand() % 100) / 8 + 12),
-                             rand() % 6 + 1);
-                buildings.push_back(b);
+            int height = (rand() % 100) / 5 + 10;
+            b.initialize(
+                glm::vec3(i * spacing, height, j * spacing),  // Position
+                glm::vec3((rand() % 50) / 10 + 5, height, (rand() % 50) / 10 + 5), // Scale
+                toTexID(rand() % 6 + 1),  // Texture ID,
+                boxShaderID
+            );
+            buildings.push_back(b);
+        }
+    }
+}
+
+// Function to create a floor for a tile
+Building createFloor(glm::vec3 position, glm::vec3 scale, GLuint shaderID, GLuint textureID) {
+    Building floor;
+    floor.initialize(
+        position, // Position of the floor
+        scale,    // Scale: very flat
+        textureID, // Texture ID
+        shaderID   // Shader program ID
+    );
+    return floor;
+}
+
+
+// Function to create a tile at a specific position
+// Function to create a tile at a specific position
+Tile createTile(int rows, int cols, int spacing, glm::vec3 position) {
+    Tile tile;
+    tile.position = position; // Assign specific position
+
+    // Create buildings for the tile
+    createGridLayout(tile.buildings, rows, cols, spacing);
+
+    // Add a floor to the tile
+    Building floor = createFloor(
+        glm::vec3(0, 0, 0),             // Position relative to the tile
+        glm::vec3(rows * spacing, 1, cols * spacing), // Scale to cover the tile
+        boxShaderID,                    // Use the same shader
+        buildingTex1                    // Example texture for the floor
+    );
+    tile.buildings.push_back(floor);
+
+    return tile;
+}
+
+
+// Function to arrange tiles in a grid
+std::vector<Tile> createTileGrid(int numRows, int numCols, int tileSpacing, int tileSize, int buildingSpacing) {
+    std::vector<Tile> tiles;
+
+    for (int row = 0; row < numRows; ++row) {
+        for (int col = 0; col < numCols; ++col) {
+            glm::vec3 tilePosition(col * (tileSize + tileSpacing), 0, row * (tileSize + tileSpacing));
+            tiles.push_back(createTile(10, 10, buildingSpacing, tilePosition));
+        }
+    }
+
+    return tiles;
+}
+
+
+
+
+
+int main() {
+
+    srand(static_cast<unsigned int>(time(0)));
+
+    // Initialize GLFW
+    if (!glfwInit()) {
+        std::cerr << "Failed to initialize GLFW." << std::endl;
+        return -1;
+    }
+
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
+    // Open a window and create its OpenGL context
+    GLFWwindow *window = glfwCreateWindow(1024, 768, "Adjacent Tile Configurations", nullptr, nullptr);
+    if (window == nullptr) {
+        std::cerr << "Failed to open a GLFW window." << std::endl;
+        glfwTerminate();
+        return -1;
+    }
+    glfwMakeContextCurrent(window);
+
+    // Ensure we can capture the escape key being pressed below
+    glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED); // Hide and lock cursor
+
+    glfwSetKeyCallback(window, key_callback);
+    glfwSetCursorPosCallback(window, mouse_callback);
+
+    // Load OpenGL functions
+    if (!gladLoadGL(glfwGetProcAddress)) {
+        std::cerr << "Failed to initialize OpenGL context." << std::endl;
+        return -1;
+    }
+
+    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_CULL_FACE);
+
+    boxShaderID = LoadShadersFromFile("../FinalProject/shader/box.vert", "../FinalProject/shader/box.frag");
+    if (boxShaderID == 0) {
+        std::cerr << "Failed to load shaders." << std::endl;
+    }
+
+    buildingTex1 = LoadTextureTileBox("../FinalProject/Textures/facade1.jpg");
+    buildingTex2 = LoadTextureTileBox("../FinalProject/Textures/facade2.jpg");
+    buildingTex3 = LoadTextureTileBox("../FinalProject/Textures/facade3.jpg");
+    buildingTex4 = LoadTextureTileBox("../FinalProject/Textures/facade4.jpg");
+    buildingTex5 = LoadTextureTileBox("../FinalProject/Textures/facade5.jpg");
+    buildingTex6 = LoadTextureTileBox("../FinalProject/Textures/facade0.jpg");
+
+    // Load floor texture
+    GLuint floorTexture = LoadTextureTileBox("../FinalProject/Textures/floor.jpg");
+
+    // Create a grid of tiles
+    int numTileRows = 20;      // Number of tile rows
+    int numTileCols = 20;      // Number of tile columns
+    int tileSpacing = 100;    // Spacing between tiles
+    int tileSize = 500;       // Approximate size of each tile
+    int buildingSpacing = 50; // Spacing between buildings in each tile
+
+    std::vector<Tile> tiles = createTileGrid(numTileRows, numTileCols, tileSpacing, tileSize, buildingSpacing);
+
+    // Camera setup
+    glm::mat4 projectionMatrix = glm::perspective(glm::radians(60.0f), 4.0f / 3.0f, 0.1f, 3000.0f);
+
+    // Main rendering loop
+    do {
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        glm::vec3 center = eye_center + cameraDirection;
+        glm::mat4 viewMatrix = glm::lookAt(eye_center, center, up);
+        glm::mat4 vp = projectionMatrix * viewMatrix;
+
+        // Render all tiles
+        for (Tile &tile : tiles) {
+            glm::mat4 tileTransform = glm::translate(glm::mat4(1.0f), tile.position);
+            for (Building &building : tile.buildings) {
+                glm::mat4 model = tileTransform; // Apply tile transform to each building
+                building.programID = boxShaderID;
+                building.render(vp * model);
             }
         }
-    }
 
-	Skybox skybox;
-	skybox.initialize(glm::vec3(200, 0, 200), glm::vec3(-1000, -1000, -1000));
+        // Swap buffers
+        glfwSwapBuffers(window);
+        glfwPollEvents();
 
-	// Camera setup
-    eye_center.y = viewDistance * cos(viewPolar);
-    eye_center.x = viewDistance * cos(viewAzimuth);
-    eye_center.z = viewDistance * sin(viewAzimuth);
+    } while (!glfwWindowShouldClose(window));
 
-	glm::mat4 viewMatrix, projectionMatrix;
-    glm::float32 FoV = 60;
-	glm::float32 zNear = 0.1f;
-	glm::float32 zFar = 3000.0f;
-	projectionMatrix = glm::perspective(glm::radians(FoV), 4.0f / 3.0f, zNear, zFar);
-
-	do
-	{
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-		viewMatrix = glm::lookAt(eye_center, lookat, up);
-		glm::mat4 vp = projectionMatrix * viewMatrix;
-
-		// Render the building
-        for (Building& building : buildings) {
-            building.render(vp);
+    // Cleanup
+    for (Tile &tile : tiles) {
+        for (Building &building : tile.buildings) {
+            building.cleanup();
         }
-
-		skybox.render(vp);
-
-		// Swap buffers
-		glfwSwapBuffers(window);
-		glfwPollEvents();
-
-	} // Check if the ESC key was pressed or the window was closed
-	while (!glfwWindowShouldClose(window));
-
-    // cleanup the buildins
-    for (Building& building : buildings) {
-        building.cleanup();
     }
 
-	skybox.cleanup();
-
-	// Close OpenGL window and terminate GLFW
-	glfwTerminate();
-
-	return 0;
+    glfwTerminate();
+    return 0;
 }
 
-// Is called whenever a key is pressed/released via GLFW
-void key_callback(GLFWwindow *window, int key, int scancode, int action, int mode)
-{
-	if (key == GLFW_KEY_R && action == GLFW_PRESS)
-	{
-		viewAzimuth = 0.f;
-		viewPolar = 0.f;
-		eye_center.y = viewDistance * cos(viewPolar);
-		eye_center.x = viewDistance * cos(viewAzimuth);
-		eye_center.z = viewDistance * sin(viewAzimuth);
-		std::cout << "Reset." << std::endl;
-	}
+// Function to handle mouse input
+void mouse_callback(GLFWwindow *window, double xpos, double ypos) {
+    if (firstMouse) {
+        lastX = xpos;
+        lastY = ypos;
+        firstMouse = false;
+    }
 
-	if (key == GLFW_KEY_UP && (action == GLFW_REPEAT || action == GLFW_PRESS))
-	{
-		viewPolar -= 0.1f;
-		eye_center.y = viewDistance * cos(viewPolar);
-	}
+    float xoffset = xpos - lastX;
+    float yoffset = lastY - ypos; // Reversed: y-coordinates go from bottom to top
+    lastX = xpos;
+    lastY = ypos;
 
-	if (key == GLFW_KEY_DOWN && (action == GLFW_REPEAT || action == GLFW_PRESS))
-	{
-		viewPolar += 0.1f;
-		eye_center.y = viewDistance * cos(viewPolar);
-	}
+    float sensitivity = 0.1f; // Adjust mouse sensitivity
+    xoffset *= sensitivity;
+    yoffset *= sensitivity;
 
-	if (key == GLFW_KEY_LEFT && (action == GLFW_REPEAT || action == GLFW_PRESS))
-	{
-		viewAzimuth -= 0.1f;
-		eye_center.x = viewDistance * cos(viewAzimuth);
-		eye_center.z = viewDistance * sin(viewAzimuth);
-	}
+    yaw += xoffset;
+    pitch += yoffset;
 
-	if (key == GLFW_KEY_RIGHT && (action == GLFW_REPEAT || action == GLFW_PRESS))
-	{
-		viewAzimuth += 0.1f;
-		eye_center.x = viewDistance * cos(viewAzimuth);
-		eye_center.z = viewDistance * sin(viewAzimuth);
-	}
+    // Constrain pitch
+    if (pitch > 89.0f) pitch = 89.0f;
+    if (pitch < -89.0f) pitch = -89.0f;
 
-	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
-		glfwSetWindowShouldClose(window, GL_TRUE);
+    // Update camera direction
+    glm::vec3 direction;
+    direction.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
+    direction.y = sin(glm::radians(pitch));
+    direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
+    cameraDirection = glm::normalize(direction);
+}
+
+// Function to handle keyboard input
+void key_callback(GLFWwindow *window, int key, int scancode, int action, int mode) {
+    glm::vec3 right = glm::normalize(glm::cross(cameraDirection, up));
+    glm::vec3 forward = glm::normalize(glm::vec3(cameraDirection.x, 0, cameraDirection.z));
+    glm::vec3 upward = glm::vec3(0, 1, 0);
+
+    if (key == GLFW_KEY_W && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
+        eye_center += cameraDirection * cameraSpeed;
+        lookat += cameraDirection * cameraSpeed;
+    }
+    if (key == GLFW_KEY_S && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
+        eye_center -= cameraDirection * cameraSpeed;
+        lookat += cameraDirection * cameraSpeed;
+    }
+    if (key == GLFW_KEY_A && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
+        eye_center -= right * cameraSpeed;
+        lookat -= right * cameraSpeed;
+    }
+    if (key == GLFW_KEY_D && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
+        eye_center += right * cameraSpeed;
+        lookat += right * cameraSpeed;
+    }
+    if (key == GLFW_KEY_R && action == GLFW_PRESS) {
+        eye_center = glm::vec3(0, 0, 500);
+        lookat = glm::vec3(0, 0, 0);
+        yaw = -90.0f;
+        pitch = 0.0f;
+    }
+    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
+        glfwSetWindowShouldClose(window, GL_TRUE);
+    }
 }
