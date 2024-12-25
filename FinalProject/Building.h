@@ -47,7 +47,7 @@ struct Building {
     void initialize(glm::vec3 position, glm::vec3 scale, int texID, GLuint shaderID);
 
     // Render the building
-    void render(glm::mat4 cameraMatrix) const;
+    void render(glm::mat4 cameraMatrix, glm::mat4* lightSpaceMatrix = nullptr) const;
 
     // Clean up resources
     void cleanup();

@@ -1,32 +1,23 @@
 #version 330 core
+layout(location = 0) in vec3 vertexPosition_modelspace;
+layout(location = 1) in vec3 vertexNormal_modelspace;
+layout(location = 2) in vec2 vertexUV; // Texture coordinates
 
-// Input attributes
-layout(location = 0) in vec3 vertexPosition;
-layout(location = 1) in vec3 vertexColor;
-layout(location = 2) in vec2 vertexUV;
-
-// Output data
-out vec3 fragPosWorld;       // Position in world space
-out vec3 color;
-out vec2 uv;
-out vec4 fragPosLightSpace;
-
-// Matrices
 uniform mat4 MVP;            // Model-View-Projection matrix
-uniform mat4 LMAP;           // Light-space matrix
-uniform mat4 modelMatrix;    // Model matrix for world-space transformation
+uniform mat4 modelMatrix;    // Model matrix
+uniform vec3 lightPosition;  // Dynamic light position in world space
+
+out vec3 fragNormal;         // Normal vector in world space
+out vec3 fragPosition;       // Position of the fragment in world space
+out vec2 fragUV;             // Interpolated texture coordinates
+out vec3 fragToLight;        // Vector to light source
 
 void main() {
-    // Transform vertex for main rendering
-    gl_Position = MVP * vec4(vertexPosition, 1.0);
+    vec4 worldPosition = modelMatrix * vec4(vertexPosition_modelspace, 1.0);
+    fragPosition = worldPosition.xyz;
+    fragNormal = mat3(transpose(inverse(modelMatrix))) * vertexNormal_modelspace;
+    fragUV = vertexUV;
+    fragToLight = lightPosition - fragPosition;
 
-    // Pass interpolated attributes to the fragment shader
-    color = vertexColor;
-    uv = vertexUV;
-
-    // Light-space position for shadow calculation
-    fragPosLightSpace = LMAP * vec4(vertexPosition, 1.0);
-
-    // Transform to world space for voxel cone tracing
-    fragPosWorld = vec3(modelMatrix * vec4(vertexPosition, 1.0));
+    gl_Position = MVP * vec4(vertexPosition_modelspace, 1.0);
 }

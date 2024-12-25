@@ -296,6 +296,13 @@ build CMakeFiles/lab2.dir/FinalProject/Skybox.cpp.obj: CXX_COMPILER__lab2_unscan
   OBJECT_DIR = CMakeFiles\lab2.dir
   OBJECT_FILE_DIR = CMakeFiles\lab2.dir\FinalProject
 
+build CMakeFiles/lab2.dir/FinalProject/Car.cpp.obj: CXX_COMPILER__lab2_unscanned_Debug C$:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/FinalProject/Car.cpp || cmake_object_order_depends_target_lab2
+  DEP_FILE = CMakeFiles\lab2.dir\FinalProject\Car.cpp.obj.d
+  FLAGS = -g -std=gnu++11 -fdiagnostics-color=always
+  INCLUDES = -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/stb -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glfw-3.1.2/include -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glm-0.9.7.1 -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glad-opengl-3.3/include -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/tinygltf-2.9.3 -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/FinalProject -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glad-3.3/include
+  OBJECT_DIR = CMakeFiles\lab2.dir
+  OBJECT_FILE_DIR = CMakeFiles\lab2.dir\FinalProject
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target lab2
@@ -304,7 +311,7 @@ build CMakeFiles/lab2.dir/FinalProject/Skybox.cpp.obj: CXX_COMPILER__lab2_unscan
 #############################################
 # Link the executable lab2.exe
 
-build lab2.exe: CXX_EXECUTABLE_LINKER__lab2_Debug CMakeFiles/lab2.dir/FinalProject/lab2.cpp.obj CMakeFiles/lab2.dir/FinalProject/render/shader.cpp.obj CMakeFiles/lab2.dir/FinalProject/Building.cpp.obj CMakeFiles/lab2.dir/FinalProject/Skybox.cpp.obj | glfw3dll.a libglad.dll.a || glfw3.dll libglad.dll
+build lab2.exe: CXX_EXECUTABLE_LINKER__lab2_Debug CMakeFiles/lab2.dir/FinalProject/lab2.cpp.obj CMakeFiles/lab2.dir/FinalProject/render/shader.cpp.obj CMakeFiles/lab2.dir/FinalProject/Building.cpp.obj CMakeFiles/lab2.dir/FinalProject/Skybox.cpp.obj CMakeFiles/lab2.dir/FinalProject/Car.cpp.obj | glfw3dll.a libglad.dll.a || glfw3.dll libglad.dll
   FLAGS = -g
   LINK_LIBRARIES = -lopengl32  -lglu32  glfw3dll.a  libglad.dll.a  -lopengl32  -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles\lab2.dir

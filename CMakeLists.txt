@@ -82,6 +82,8 @@ add_executable(lab2
 		FinalProject/render/shader.cpp
 		FinalProject/Building.cpp
 		FinalProject/Skybox.cpp
+		FinalProject/Car.cpp
+		FinalProject/Car.h
 )
 target_link_libraries(lab2
 		${OPENGL_LIBRARY}

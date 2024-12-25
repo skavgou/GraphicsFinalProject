@@ -1,70 +1,49 @@
 #version 330 core
 
-// Inputs
-in vec3 fragPosWorld;
-in vec3 color;
-in vec2 uv;
-in vec4 fragPosLightSpace;
+in vec3 fragNormal;
+in vec3 fragPosition;
+in vec3 fragToLight;
+in vec2 fragUV;
 
-// Outputs
-out vec3 finalColor;
+uniform vec3 lightColor;        // Light color/intensity
+uniform vec3 ambientColor;      // Ambient light color
+uniform sampler2D textureSampler; // Object texture sampler
+uniform sampler2D shadowDepthMap; // Shadow map sampler
 
-// Uniforms
-uniform sampler2D textureSampler;
-uniform sampler2D shadowDepthMap;
-uniform sampler3D voxelTexture;  // Voxel grid for cone tracing
-uniform vec3 lightDir;           // Direction of sunlight
-uniform vec3 sunColor;           // Color of the sunlight
-uniform vec3 cameraPos;          // Camera position (for specular reflections)
+uniform mat4 lightSpaceMatrix;  // Light-space transformation matrix
 
-// Helper: Calculate shadow
-float calculateShadow(vec4 fragPosLightSpace) {
-    vec3 projCoords = fragPosLightSpace.xyz / fragPosLightSpace.w;
-    projCoords = projCoords * 0.5 + 0.5; // Transform to [0, 1]
+out vec4 fragColor;
+
+float calculateShadow(vec4 fragLightSpacePos) {
+    // Perform perspective division to get normalized device coordinates
+    vec3 projCoords = fragLightSpacePos.xyz / fragLightSpacePos.w;
+    projCoords = projCoords * 0.5 + 0.5; // Transform to [0, 1] range
+
+    // Read depth from the shadow map
     float closestDepth = texture(shadowDepthMap, projCoords.xy).r;
     float currentDepth = projCoords.z;
-    float bias = 0.005;
-    return currentDepth - bias > closestDepth ? 0.5 : 1.0; // Softer shadow
-}
 
-// Helper: Voxel cone trace for indirect lighting
-vec3 voxelConeTrace(vec3 origin, vec3 direction, float coneAngle, int steps) {
-    vec3 result = vec3(0.0);
-    vec3 step = direction * coneAngle;
-
-    for (int i = 0; i < steps; ++i) {
-        origin += step;
-        vec3 voxelColor = texture(voxelTexture, origin).rgb;
-        result += voxelColor / float(steps); // Accumulate lighting
-    }
-    return result;
+    // Calculate shadow bias to prevent acne
+    float bias = max(0.05 * (1.0 - dot(normalize(fragNormal), normalize(fragToLight))), 0.005);
+    float shadow = (currentDepth - bias) > closestDepth ? 0.5 : 1.0; // Simple shadow calculation
+    return shadow;
 }
 
 void main() {
-    // Sample the base texture color
-    vec3 textureColor = texture(textureSampler, uv).rgb;
+    // Normalize input vectors
+    vec3 normalizedNormal = normalize(fragNormal);
+    vec3 normalizedToLight = normalize(fragToLight);
 
-    // Direct sunlight (lambertian shading)
-    vec3 normLightDir = normalize(lightDir);
-    float diff = max(dot(normLightDir, fragPosWorld), 0.0);
-    vec3 directLighting = diff * sunColor * textureColor;
+    // Diffuse lighting
+    float diffuse = max(dot(normalizedNormal, normalizedToLight), 0.0);
 
-    // Calculate shadow
-    float shadow = calculateShadow(fragPosLightSpace);
+    // Shadow calculation
+    vec4 fragLightSpacePos = lightSpaceMatrix * vec4(fragPosition, 1.0);
+    float shadow = calculateShadow(fragLightSpacePos);
 
-    // Indirect lighting using voxel cone tracing
-    vec3 indirectLighting = voxelConeTrace(fragPosWorld, normLightDir, 0.1, 16);
+    // Combine texture color with lighting
+    vec4 textureColor = texture(textureSampler, fragUV);
+    vec3 lighting = (ambientColor + shadow * diffuse * lightColor) * textureColor.rgb;
 
-    // Combine direct and indirect lighting
-    vec3 ambient = 0.1 * textureColor; // Basic ambient light
-    vec3 totalLighting = shadow * directLighting + indirectLighting + ambient;
-
-    // Specular highlights (Blinn-Phong model)
-    vec3 viewDir = normalize(cameraPos - fragPosWorld);
-    vec3 halfDir = normalize(normLightDir + viewDir);
-    float spec = pow(max(dot(halfDir, fragPosWorld), 0.0), 16.0);
-    vec3 specular = spec * sunColor;
-
-    // Final color
-    finalColor = totalLighting + specular;
+    fragColor = vec4(lighting, textureColor.a);
 }

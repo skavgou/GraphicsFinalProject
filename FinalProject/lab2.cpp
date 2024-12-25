@@ -2,15 +2,18 @@
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-
+#include <glm/gtc/type_ptr.hpp>
 #include <vector>
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
 #include "Building.h"
+#include "Skybox.h"
 #include "render/shader.h"
 
 GLuint boxShaderID;
+GLuint skyboxShaderID;
+GLuint skyboxTexID;
 GLuint buildingTex1;
 GLuint buildingTex2;
 GLuint buildingTex3;
@@ -18,12 +21,14 @@ GLuint buildingTex4;
 GLuint buildingTex5;
 GLuint buildingTex6;
 
+Skybox skybox;
+
 // Function prototypes
 void key_callback(GLFWwindow *window, int key, int scancode, int action, int mode);
 void mouse_callback(GLFWwindow *window, double xpos, double ypos);
 
 // OpenGL camera view parameters
-static glm::vec3 eye_center(0, 0, 500);
+static glm::vec3 eye_center(0, 20, 500);
 static glm::vec3 lookat(0, 0, 0);
 static glm::vec3 up(0, 1, 0);
 static glm::vec3 cameraDirection = glm::normalize(lookat - eye_center);
@@ -39,6 +44,14 @@ static bool firstMouse = true;
 static float lastX = 512, lastY = 384; // Assume window center
 static float yaw = -90.0f; // Yaw starts facing down -Z axis
 static float pitch = 0.0f;
+
+// Sun movement variables
+glm::vec3 sunCenter(0.0f, 0.0f, 0.0f);   // Center of the sun's orbit
+float sunRadius = 1000.0f;               // Radius of the sun's orbit
+float sunSpeed = 0.01f;                  // Speed of the sun's movement (radians per frame)
+float sunAngle = 0.0f;                   // Current angle of the sun
+glm::vec3 lightPosition(0.0f, 1000.0f, 0.0f); // Initial light position
+
 
 // Tile structure
 struct Tile {
@@ -89,9 +102,6 @@ Building createFloor(glm::vec3 position, glm::vec3 scale, GLuint shaderID, GLuin
     return floor;
 }
 
-
-// Function to create a tile at a specific position
-// Function to create a tile at a specific position
 Tile createTile(int rows, int cols, int spacing, glm::vec3 position) {
     Tile tile;
     tile.position = position; // Assign specific position
@@ -111,7 +121,6 @@ Tile createTile(int rows, int cols, int spacing, glm::vec3 position) {
     return tile;
 }
 
-
 // Function to arrange tiles in a grid
 std::vector<Tile> createTileGrid(int numRows, int numCols, int tileSpacing, int tileSize, int buildingSpacing) {
     std::vector<Tile> tiles;
@@ -126,8 +135,22 @@ std::vector<Tile> createTileGrid(int numRows, int numCols, int tileSpacing, int 
     return tiles;
 }
 
+void initializeSkybox() {
+    skybox.initialize(glm::vec3(200, 0, 200), glm::vec3(-1000, -1000, -1000), skyboxTexID, skyboxShaderID);
+}
 
+void renderSkybox(glm::mat4 projectionMatrix, glm::vec3 cameraPosition) {
+    glDepthFunc(GL_LEQUAL); // Change depth function to render the skybox behind all other objects
 
+    // Create a view matrix without translation (only orientation matters for the skybox)
+    glm::mat4 viewMatrix = glm::mat4(glm::mat3(glm::lookAt(cameraPosition, cameraPosition + cameraDirection, up)));
+
+    glm::mat4 vpMatrix = projectionMatrix * viewMatrix;
+
+    skybox.render(vpMatrix);
+
+    glDepthFunc(GL_LESS); // Restore default depth function
+}
 
 
 int main() {
@@ -154,7 +177,6 @@ int main() {
     }
     glfwMakeContextCurrent(window);
 
-    // Ensure we can capture the escape key being pressed below
     glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED); // Hide and lock cursor
 
@@ -170,20 +192,25 @@ int main() {
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
 
+    // Load shaders
     boxShaderID = LoadShadersFromFile("../FinalProject/shader/box.vert", "../FinalProject/shader/box.frag");
-    if (boxShaderID == 0) {
+    skyboxShaderID = LoadShadersFromFile("../FinalProject/shader/skybox.vert", "../FinalProject/shader/skybox.frag");
+    GLuint shadowShaderID = LoadShadersFromFile("../FinalProject/shader/shadow.vert", "../FinalProject/shader/shadow.frag");
+
+
+    if (boxShaderID == 0 || shadowShaderID == 0) {
         std::cerr << "Failed to load shaders." << std::endl;
+        return -1;
     }
 
+    // Load textures
     buildingTex1 = LoadTextureTileBox("../FinalProject/Textures/facade1.jpg");
     buildingTex2 = LoadTextureTileBox("../FinalProject/Textures/facade2.jpg");
     buildingTex3 = LoadTextureTileBox("../FinalProject/Textures/facade3.jpg");
     buildingTex4 = LoadTextureTileBox("../FinalProject/Textures/facade4.jpg");
     buildingTex5 = LoadTextureTileBox("../FinalProject/Textures/facade5.jpg");
     buildingTex6 = LoadTextureTileBox("../FinalProject/Textures/facade0.jpg");
-
-    // Load floor texture
-    GLuint floorTexture = LoadTextureTileBox("../FinalProject/Textures/floor.jpg");
+    skyboxTexID = LoadTextureTileBox("../FinalProject/Textures/sky.png");
 
     // Create a grid of tiles
     int numTileRows = 20;      // Number of tile rows
@@ -193,25 +220,110 @@ int main() {
     int buildingSpacing = 50; // Spacing between buildings in each tile
 
     std::vector<Tile> tiles = createTileGrid(numTileRows, numTileCols, tileSpacing, tileSize, buildingSpacing);
+    initializeSkybox();
 
     // Camera setup
     glm::mat4 projectionMatrix = glm::perspective(glm::radians(60.0f), 4.0f / 3.0f, 0.1f, 3000.0f);
+
+    // Lighting setup
+    glm::vec3 lightPosition(0.0f, 1000.0f, 0.0f); // Move the light higher
+    glm::vec3 lightColor(2.0f, 2.0f, 2.0f); // Increase the brightness of the light
+    glUniform3fv(glGetUniformLocation(boxShaderID, "lightColor"), 1, glm::value_ptr(lightColor));
+    glm::vec3 ambientColor(0.4f, 0.4f, 0.4f); // Increase ambient light
+    glUniform3fv(glGetUniformLocation(boxShaderID, "ambientColor"), 1, glm::value_ptr(ambientColor));
+
+
+    // Shadow map setup
+    GLuint shadowMapFBO;
+    glGenFramebuffers(1, &shadowMapFBO);
+
+    GLuint shadowDepthMap;
+    glGenTextures(1, &shadowDepthMap);
+    glBindTexture(GL_TEXTURE_2D, shadowDepthMap);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, 1024, 1024, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+    float borderColor[] = { 1.0, 1.0, 1.0, 1.0 };
+    glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
+
+    glBindFramebuffer(GL_FRAMEBUFFER, shadowMapFBO);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, shadowDepthMap, 0);
+    glDrawBuffer(GL_NONE);
+    glReadBuffer(GL_NONE);
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+    // Light-space matrix for shadow mapping
+    glm::mat4 lightProjection = glm::perspective(glm::radians(90.0f), 1.0f, 1.0f, 1000.0f);
+    glm::mat4 lightView = glm::lookAt(lightPosition, glm::vec3(0.0f), glm::vec3(0.0, 1.0, 0.0));
+    glm::mat4 lightSpaceMatrix = lightProjection * lightView;
+
 
     // Main rendering loop
     do {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        glm::vec3 center = eye_center + cameraDirection;
-        glm::mat4 viewMatrix = glm::lookAt(eye_center, center, up);
-        glm::mat4 vp = projectionMatrix * viewMatrix;
+        // Update the sun's position based on a circular trajectory
+        sunAngle += sunSpeed;
+        if (sunAngle > 2.0f * glm::pi<float>()) {
+            sunAngle -= 2.0f * glm::pi<float>(); // Reset angle to avoid overflow
+        }
 
-        // Render all tiles
+        lightPosition = glm::vec3(
+            sunCenter.x + sunRadius * cos(sunAngle),  // X position
+            sunCenter.y + sunRadius * sin(sunAngle),  // Y position
+            sunCenter.z                               // Z position (constant for simplicity)
+        );
+
+        // First pass: render depth to the shadow map
+        glBindFramebuffer(GL_FRAMEBUFFER, shadowMapFBO);
+        glClear(GL_DEPTH_BUFFER_BIT);
+        glUseProgram(shadowShaderID);
+        glUniformMatrix4fv(glGetUniformLocation(shadowShaderID, "lightSpaceMatrix"), 1, GL_FALSE, glm::value_ptr(lightSpaceMatrix));
         for (Tile &tile : tiles) {
             glm::mat4 tileTransform = glm::translate(glm::mat4(1.0f), tile.position);
             for (Building &building : tile.buildings) {
-                glm::mat4 model = tileTransform; // Apply tile transform to each building
-                building.programID = boxShaderID;
-                building.render(vp * model);
+                building.render(tileTransform, &lightSpaceMatrix); // Shadow pass
+            }
+        }
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+        // Render the skybox
+        renderSkybox(projectionMatrix, eye_center);
+
+        // Second pass: render the scene with updated lighting
+        glUseProgram(boxShaderID);
+
+        // Update light position (dynamic lighting)
+        glUniform3fv(glGetUniformLocation(boxShaderID, "lightPosition"), 1, glm::value_ptr(lightPosition));
+
+        // Update light properties
+        glUniform3fv(glGetUniformLocation(boxShaderID, "lightColor"), 1, glm::value_ptr(lightColor));
+        glUniform3fv(glGetUniformLocation(boxShaderID, "ambientColor"), 1, glm::value_ptr(ambientColor));
+
+        // Pass the light-space matrix for shadow mapping
+        glUniformMatrix4fv(glGetUniformLocation(boxShaderID, "lightSpaceMatrix"), 1, GL_FALSE, glm::value_ptr(lightSpaceMatrix));
+
+        // Bind the shadow map
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, shadowDepthMap);
+        glUniform1i(glGetUniformLocation(boxShaderID, "shadowDepthMap"), 1);
+
+        // Loop through all tiles and buildings
+        glm::mat4 viewMatrix = glm::lookAt(eye_center, eye_center + cameraDirection, up);
+        glm::mat4 vp = projectionMatrix * viewMatrix;
+
+        for (Tile &tile : tiles) {
+            glm::mat4 tileTransform = glm::translate(glm::mat4(1.0f), tile.position);
+            for (Building &building : tile.buildings) {
+                // Bind building texture
+                glActiveTexture(GL_TEXTURE0);
+                glBindTexture(GL_TEXTURE_2D, building.textureID); // Assume Building has a `textureID`
+                glUniform1i(glGetUniformLocation(boxShaderID, "textureSampler"), 0);
+
+                // Render the building
+                building.render(vp * tileTransform); // Standard rendering pass
             }
         }
 
@@ -287,7 +399,7 @@ void key_callback(GLFWwindow *window, int key, int scancode, int action, int mod
         lookat += right * cameraSpeed;
     }
     if (key == GLFW_KEY_R && action == GLFW_PRESS) {
-        eye_center = glm::vec3(0, 0, 500);
+        eye_center = glm::vec3(0, 20, 500);
         lookat = glm::vec3(0, 0, 0);
         yaw = -90.0f;
         pitch = 0.0f;

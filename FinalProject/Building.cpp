@@ -231,7 +231,7 @@ void Building::initialize(glm::vec3 position, glm::vec3 scale, int texID, GLuint
     textureSamplerID = glGetUniformLocation(programID, "textureSampler");
 }
 
-void Building::render(glm::mat4 cameraMatrix) const{
+void Building::render(glm::mat4 cameraMatrix, glm::mat4* lightSpaceMatrix) const {
 	glUseProgram(programID);
 
 	glEnableVertexAttribArray(0);
@@ -242,23 +242,25 @@ void Building::render(glm::mat4 cameraMatrix) const{
 	glBindBuffer(GL_ARRAY_BUFFER, colorBufferID);
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
-	// Enable UV buffer and texture sampler
-	glEnableVertexAttribArray(2);
-	glBindBuffer(GL_ARRAY_BUFFER, uvBufferID);
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, 0);
+	if (!lightSpaceMatrix) {
+		// Enable UV buffer and texture sampler only for normal rendering
+		glEnableVertexAttribArray(2);
+		glBindBuffer(GL_ARRAY_BUFFER, uvBufferID);
+		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, 0);
 
-	// Set texture sampler to use texture unit 0
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, textureID);
-	glUniform1i(textureSamplerID, 0);
+		// Set texture sampler to use texture unit 0
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, textureID);
+		glUniform1i(textureSamplerID, 0);
+	}
 
 	// Model transform
 	glm::mat4 modelMatrix = glm::mat4();
 	modelMatrix = glm::translate(modelMatrix, position);
 	modelMatrix = glm::scale(modelMatrix, scale);
 
-	// Set model-view-projection matrix
-	glm::mat4 mvp = cameraMatrix * modelMatrix;
+	// Use the appropriate matrix
+	glm::mat4 mvp = lightSpaceMatrix ? (*lightSpaceMatrix) * modelMatrix : cameraMatrix * modelMatrix;
 	glUniformMatrix4fv(mvpMatrixID, 1, GL_FALSE, &mvp[0][0]);
 
 	// Draw the box
@@ -267,7 +269,9 @@ void Building::render(glm::mat4 cameraMatrix) const{
 
 	glDisableVertexAttribArray(0);
 	glDisableVertexAttribArray(1);
-	glDisableVertexAttribArray(2);
+	if (!lightSpaceMatrix) {
+		glDisableVertexAttribArray(2);
+	}
 }
 
 

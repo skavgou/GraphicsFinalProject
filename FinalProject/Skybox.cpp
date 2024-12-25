@@ -170,113 +170,94 @@ const GLfloat Skybox::uv_buffer_data[48] = {
     GLuint textureSamplerID;
     GLuint programID;*/
 
-void Skybox::initialize(glm::vec3 position, glm::vec3 scale) {
-    // Define scale of the building geometry
-    this->position = position;
-    this->scale = scale;
+void Skybox::initialize(glm::vec3 position, glm::vec3 scale, int texID, GLuint shaderID) {
+	this->position = position;
+	this->scale = scale;
+	programID = shaderID;
 
-    // Create a vertex array object
+
+    // Create and bind VAO
     glGenVertexArrays(1, &vertexArrayID);
     glBindVertexArray(vertexArrayID);
 
-    // Create a vertex buffer object to store the vertex data
+    // Create and bind vertex buffer
     glGenBuffers(1, &vertexBufferID);
     glBindBuffer(GL_ARRAY_BUFFER, vertexBufferID);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertex_buffer_data), vertex_buffer_data, GL_STATIC_DRAW);
 
-    // Create a vertex buffer object to store the color data
-    // TODO:
+    // Create and bind color buffer
     glGenBuffers(1, &colorBufferID);
     glBindBuffer(GL_ARRAY_BUFFER, colorBufferID);
     glBufferData(GL_ARRAY_BUFFER, sizeof(color_buffer_data), color_buffer_data, GL_STATIC_DRAW);
 
-    //for (int i = 0; i < 24; ++i) uv_buffer_data[2*i+1] *= 3;
+    // Create modifiable UV buffer
+    GLfloat modifiable_uv_buffer_data[48];
+    memcpy(modifiable_uv_buffer_data, uv_buffer_data, sizeof(uv_buffer_data));
+    for (int i = 0; i < 24; ++i) {
+        //modifiable_uv_buffer_data[2 * i + 1] *= scale[2] / 10;
+    }
 
-    // TODO: Create a vertex buffer object to store the UV data
-    // --------------------------------------------------------
-    // Create a vertex buffer object to store the UV data
+    // Create and bind UV buffer
     glGenBuffers(1, &uvBufferID);
     glBindBuffer(GL_ARRAY_BUFFER, uvBufferID);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(uv_buffer_data), uv_buffer_data,
-                 GL_STATIC_DRAW);
-    // --------------------------------------------------------
+    glBufferData(GL_ARRAY_BUFFER, sizeof(modifiable_uv_buffer_data), modifiable_uv_buffer_data, GL_STATIC_DRAW);
 
-    // Create an index buffer object to store the index data that defines triangle faces
+    // Create and bind index buffer
     glGenBuffers(1, &indexBufferID);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBufferID);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(index_buffer_data), index_buffer_data, GL_STATIC_DRAW);
 
-    // Create and compile our GLSL program from the shaders
-    programID = LoadShadersFromFile("../FinalProject/shader/box.vert", "../FinalProject/shader/box.frag");
-    if (programID == 0)
-    {
-        std::cerr << "Failed to load shaders." << std::endl;
-    }
-
-    // Get a handle for our "MVP" uniform
+    // Get uniform locations
     mvpMatrixID = glGetUniformLocation(programID, "MVP");
 
-    // TODO: Load a texture
-    // --------------------
-    textureID = LoadTextureTileBox("../FinalProject/Textures/sky_debug.png");
-    // --------------------
+    // Load texture based on texID
+    textureID = texID;
 
-    // TODO: Get a handle to texture sampler
-    // -------------------------------------
-    // Get a handle for our "textureSampler" uniform
-    textureSamplerID = glGetUniformLocation(programID,"textureSampler");
-    // -------------------------------------
+    // Get texture sampler location
+    textureSamplerID = glGetUniformLocation(programID, "textureSampler");
 }
 
-void Skybox::render(glm::mat4 cameraMatrix) {
-    glUseProgram(programID);
+void Skybox::render(glm::mat4 cameraMatrix, glm::mat4* lightSpaceMatrix) const {
+	glUseProgram(programID);
 
-    glEnableVertexAttribArray(0);
-    glBindBuffer(GL_ARRAY_BUFFER, vertexBufferID);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	glEnableVertexAttribArray(0);
+	glBindBuffer(GL_ARRAY_BUFFER, vertexBufferID);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
-    glEnableVertexAttribArray(1);
-    glBindBuffer(GL_ARRAY_BUFFER, colorBufferID);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	glEnableVertexAttribArray(1);
+	glBindBuffer(GL_ARRAY_BUFFER, colorBufferID);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBufferID);
+	if (!lightSpaceMatrix) {
+		// Enable UV buffer and texture sampler only for normal rendering
+		glEnableVertexAttribArray(2);
+		glBindBuffer(GL_ARRAY_BUFFER, uvBufferID);
+		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, 0);
 
-    // TODO: Model transform
-    // -----------------------
-    glm::mat4 modelMatrix = glm::mat4();
-    // Translate the building to its position
-    modelMatrix = glm::translate(modelMatrix, position);
-    // Scale the box along each axis to make it look like a building
-    modelMatrix = glm::scale(modelMatrix, scale);
-    // -----------------------
+		// Set texture sampler to use texture unit 0
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, textureID);
+		glUniform1i(textureSamplerID, 0);
+	}
 
-    // Set model-view-projection matrix
-    glm::mat4 mvp = cameraMatrix * modelMatrix;
-    glUniformMatrix4fv(mvpMatrixID, 1, GL_FALSE, &mvp[0][0]);
+	// Model transform
+	glm::mat4 modelMatrix = glm::mat4();
+	modelMatrix = glm::translate(modelMatrix, position);
+	modelMatrix = glm::scale(modelMatrix, scale);
 
-    // TODO: Enable UV buffer and texture sampler
-    // ------------------------------------------
-    glEnableVertexAttribArray(2);
-    glBindBuffer(GL_ARRAY_BUFFER, uvBufferID);
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, 0);
-    // Set textureSampler to use texture unit 0
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, textureID);
-    glUniform1i(textureSamplerID, 0);
+	// Use the appropriate matrix
+	glm::mat4 mvp = lightSpaceMatrix ? (*lightSpaceMatrix) * modelMatrix : cameraMatrix * modelMatrix;
+	glUniformMatrix4fv(mvpMatrixID, 1, GL_FALSE, &mvp[0][0]);
 
-    // ------------------------------------------
+	// Draw the box
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBufferID);
+	glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, (void*)0);
 
-    // Draw the box
-    glDrawElements(
-            GL_TRIANGLES,      // mode
-            36,    			   // number of indices
-            GL_UNSIGNED_INT,   // type
-            (void*)0           // element array buffer offset
-    );
-
-    glDisableVertexAttribArray(0);
-    glDisableVertexAttribArray(1);
-    //glDisableVertexAttribArray(2);
+	glDisableVertexAttribArray(0);
+	glDisableVertexAttribArray(1);
+	if (!lightSpaceMatrix) {
+		glDisableVertexAttribArray(2);
+	}
 }
 
 void Skybox::cleanup() {
