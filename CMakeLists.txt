@@ -80,10 +80,8 @@ target_link_libraries(lab2_skybox
 add_executable(lab2
 		FinalProject/lab2.cpp
 		FinalProject/render/shader.cpp
-		FinalProject/Building.cpp
+		FinalProject/Building2.cpp
 		FinalProject/Skybox.cpp
-		FinalProject/Car.cpp
-		FinalProject/Car.h
 )
 target_link_libraries(lab2
 		${OPENGL_LIBRARY}

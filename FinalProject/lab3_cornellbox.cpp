@@ -13,6 +13,7 @@
 
 #include <vector>
 #include <iostream>
+#include <glm/gtc/type_ptr.hpp>
 #define _USE_MATH_DEFINES
 
 //#define STB_IMAGE_IMPLEMENTATION
@@ -315,9 +316,9 @@ struct CornellBox {
         glBindBuffer(GL_ARRAY_BUFFER, colorBufferID);
         glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
-        glEnableVertexAttribArray(2);
+        glEnableVertexAttribArray(3);
         glBindBuffer(GL_ARRAY_BUFFER, normalBufferID);
-        glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, 0);
+        glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBufferID);
 
@@ -326,6 +327,11 @@ struct CornellBox {
         glUniformMatrix4fv(mvpMatrixID, 1, GL_FALSE, &mvp[0][0]);
         glm::mat4 lmap = lightMatrix;
         glUniformMatrix4fv(lMapMatrixID, 1, GL_FALSE, &lmap[0][0]);
+
+        glm::mat4 modelMat = glm::mat4(1.0);
+
+        GLuint modelMatrixID = glGetUniformLocation(programID, "modelMatrix");
+        glUniformMatrix4fv(modelMatrixID, 1, GL_FALSE, glm::value_ptr(modelMat));
 
         // Set light data
         glUniform3fv(lightPositionID, 1, &lightPosition[0]);
@@ -357,7 +363,7 @@ struct CornellBox {
 
 
 
-int main(void)
+int main()
 {
     // Initialise GLFW
     if (!glfwInit())
@@ -474,10 +480,8 @@ int main(void)
 
         for (auto& building : buildings)
         {
-            building.render(lp, lp, shadowFBO);
+            building.render(lp, lp, shadowFBO, lightPosition, lightIntensity);
         }
-
-
 
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
         glViewport(0, 0, windowWidth, windowHeight);
@@ -497,7 +501,7 @@ int main(void)
 
         for (auto& building : buildings)
         {
-            building.render(vp, lp, shadowFBO);
+            building.render(vp, lp, shadowFBO, lightPosition, lightIntensity);
         }
 
         // Save depth map if requested

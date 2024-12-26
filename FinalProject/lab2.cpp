@@ -7,7 +7,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
-#include "Building.h"
+#include "Building2.h"
 #include "Skybox.h"
 #include "render/shader.h"
 
@@ -28,7 +28,7 @@ void key_callback(GLFWwindow *window, int key, int scancode, int action, int mod
 void mouse_callback(GLFWwindow *window, double xpos, double ypos);
 
 // OpenGL camera view parameters
-static glm::vec3 eye_center(5000, 20, 5000);
+static glm::vec3 eye_center(0, 20, 0);
 static glm::vec3 lookat(0, 0, 0);
 static glm::vec3 up(0, 1, 0);
 static glm::vec3 cameraDirection = glm::normalize(lookat - eye_center);
@@ -52,10 +52,18 @@ float sunSpeed = 0.1f;                  // Speed of the sun's movement (radians 
 float sunAngle = 0.0f;                   // Current angle of the sun
 glm::vec3 lightPosition(0.0f, 1000.0f, 0.0f); // Initial light position
 
+const glm::vec3 wave500(0.0f, 255.0f, 146.0f);
+const glm::vec3 wave600(255.0f, 190.0f, 0.0f);
+const glm::vec3 wave700(205.0f, 0.0f, 0.0f);
+static glm::vec3 lightIntensity = 5.0f * (8.0f * wave500 + 15.6f * wave600 + 18.4f * wave700);
+
+static glm::vec3 lightUp(0, 0, 1);
+static int shadowMapWidth = 0;
+static int shadowMapHeight = 0;
 
 // Tile structure
 struct Tile {
-    std::vector<Building> buildings;
+    std::vector<Building2> buildings;
     glm::vec3 position; // Position of the tile
 };
 
@@ -74,14 +82,14 @@ GLuint toTexID(int texID) {
 }
 
 // Function to create a grid of buildings
-void createGridLayout(std::vector<Building> &buildings, int rows, int cols, int spacing) {
+void createGridLayout(std::vector<Building2> &buildings, int rows, int cols, int spacing) {
     for (int i = 0; i < rows; ++i) {
         for (int j = 0; j < cols; ++j) {
-            Building b;
-            int height = ((rand() % 100) / 5 + 10) * 10;
+            Building2 b;
+            int height = ((rand() % 100) / 5 + 10);
             b.initialize(
                 glm::vec3(i * spacing, height, j * spacing),  // Position
-                glm::vec3((rand() % 50) / 10 + 5, height, (rand() % 50) / 10 + 5), // Scale
+                glm::vec3((rand() % 50) / 10 + 20, height, (rand() % 50) / 10 + 20), // Scale
                 toTexID(rand() % 6 + 1),  // Texture ID,
                 boxShaderID
             );
@@ -91,8 +99,8 @@ void createGridLayout(std::vector<Building> &buildings, int rows, int cols, int 
 }
 
 // Function to create a floor for a tile
-Building createFloor(glm::vec3 position, glm::vec3 scale, GLuint shaderID, GLuint textureID) {
-    Building floor;
+Building2 createFloor(glm::vec3 position, glm::vec3 scale, GLuint shaderID, GLuint textureID) {
+    Building2 floor;
     floor.initialize(
         position, // Position of the floor
         scale,    // Scale: very flat
@@ -110,7 +118,7 @@ Tile createTile(int rows, int cols, int spacing, glm::vec3 position) {
     createGridLayout(tile.buildings, rows, cols, spacing);
 
     // Add a floor to the tile
-    Building floor = createFloor(
+    Building2 floor = createFloor(
         glm::vec3(0, 0, 0),             // Position relative to the tile
         glm::vec3(rows * spacing, 1, cols * spacing), // Scale to cover the tile
         boxShaderID,                    // Use the same shader
@@ -128,7 +136,7 @@ std::vector<Tile> createTileGrid(int numRows, int numCols, int tileSpacing, int 
     for (int row = 0; row < numRows; ++row) {
         for (int col = 0; col < numCols; ++col) {
             glm::vec3 tilePosition(col * (tileSize + tileSpacing), 0, row * (tileSize + tileSpacing));
-            tiles.push_back(createTile(10, 10, buildingSpacing, tilePosition));
+            tiles.push_back(createTile(2, 2, buildingSpacing, tilePosition));
         }
     }
 
@@ -193,7 +201,7 @@ int main() {
     glEnable(GL_CULL_FACE);
 
     // Load shaders
-    boxShaderID = LoadShadersFromFile("../FinalProject/shader/box.vert", "../FinalProject/shader/box.frag");
+    boxShaderID = LoadShadersFromFile("../FinalProject/shader/box2.vert", "../FinalProject/shader/box2.frag");
     skyboxShaderID = LoadShadersFromFile("../FinalProject/shader/skybox.vert", "../FinalProject/shader/skybox.frag");
     GLuint shadowShaderID = LoadShadersFromFile("../FinalProject/shader/box.vert", "../FinalProject/shader/box.frag");
 
@@ -221,31 +229,30 @@ int main() {
 
 
     // Shadow map setup
-    GLuint shadowMapFBO, shadowDepthMap;
-    glGenFramebuffers(1, &shadowMapFBO);
+    GLuint shadowFBO, shadowDepthTexture;
+    glm::mat4 lightProjectionMatrix, lightViewMatrix, lightSpaceMatrix;
 
-    glGenTextures(1, &shadowDepthMap);
-    glBindTexture(GL_TEXTURE_2D, shadowDepthMap);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, 1024, 1024, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
+    glGenFramebuffers(1, &shadowFBO);
+    glGenTextures(1, &shadowDepthTexture);
+    glBindTexture(GL_TEXTURE_2D, shadowDepthTexture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, shadowMapWidth, shadowMapHeight, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
-    float borderColor[] = {1.0f, 1.0f, 1.0f, 1.0f};
-    glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
-    glBindFramebuffer(GL_FRAMEBUFFER, shadowMapFBO);
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, shadowDepthMap, 0);
+    glBindFramebuffer(GL_FRAMEBUFFER, shadowFBO);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, shadowDepthTexture, 0);
     glDrawBuffer(GL_NONE);
     glReadBuffer(GL_NONE);
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
     // Create a grid of tiles
-    int numTileRows = 20;      // Number of tile rows
-    int numTileCols = 20;      // Number of tile columns
+    int numTileRows = 2;      // Number of tile rows
+    int numTileCols = 2;      // Number of tile columns
     int tileSpacing = 100;    // Spacing between tiles
     int tileSize = 500;       // Approximate size of each tile
-    int buildingSpacing = 50; // Spacing between buildings in each tile
+    int buildingSpacing = 75; // Spacing between buildings in each tile
 
     std::vector<Tile> tiles = createTileGrid(numTileRows, numTileCols, tileSpacing, tileSize, buildingSpacing);
 
@@ -258,7 +265,7 @@ int main() {
     // Light-space matrix for shadow mapping
     glm::mat4 lightProjection = glm::perspective(glm::radians(90.0f), 1.0f, 1.0f, 1000.0f);
     glm::mat4 lightView = glm::lookAt(lightPosition, glm::vec3(0.0f), glm::vec3(0.0, 1.0, 0.0));
-    glm::mat4 lightSpaceMatrix = lightProjection * lightView;
+    //glm::mat4 lightSpaceMatrix = lightProjection * lightView;
 
 
     // Main rendering loop
@@ -283,7 +290,7 @@ int main() {
         glm::mat4 lightSpaceMatrix = lightProjection * lightView;
 
         // First pass: Render shadow map
-        glBindFramebuffer(GL_FRAMEBUFFER, shadowMapFBO);
+        glBindFramebuffer(GL_FRAMEBUFFER, shadowFBO);
         glViewport(0, 0, 1024, 1024);
         glClear(GL_DEPTH_BUFFER_BIT);
 
@@ -292,8 +299,8 @@ int main() {
 
         for (Tile &tile : tiles) {
             glm::mat4 tileTransform = glm::translate(glm::mat4(1.0f), tile.position);
-            for (Building &building : tile.buildings) {
-                building.render(tileTransform, lightSpaceMatrix, shadowDepthMap); // Shadow pass
+            for (Building2 &building : tile.buildings) {
+                building.render(tileTransform, lightSpaceMatrix, shadowFBO, lightPosition, lightIntensity); // Shadow pass
             }
         }
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -311,8 +318,8 @@ int main() {
 
         for (Tile &tile : tiles) {
             glm::mat4 tileTransform = glm::translate(glm::mat4(1.0f), tile.position);
-            for (Building &building : tile.buildings) {
-                building.render(vpMatrix * tileTransform, lightSpaceMatrix, shadowDepthMap);
+            for (Building2 &building : tile.buildings) {
+                building.render(vpMatrix * tileTransform, lightSpaceMatrix, shadowFBO, lightPosition, lightIntensity);
             }
         }
 
@@ -326,7 +333,7 @@ int main() {
 
     // Cleanup
     for (Tile &tile : tiles) {
-        for (Building &building : tile.buildings) {
+        for (Building2 &building : tile.buildings) {
             building.cleanup();
         }
     }

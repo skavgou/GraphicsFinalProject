@@ -31,6 +31,7 @@ struct Building2 {
 	static const GLfloat color_buffer_data[72];
 	static const GLuint index_buffer_data[36];
 	static const GLfloat uv_buffer_data[48];
+	static const GLfloat normal_buffer_data[72];
 
 	GLuint vertexArrayID;
 	GLuint vertexBufferID;
@@ -42,14 +43,17 @@ struct Building2 {
 	GLuint mvpMatrixID;
 	GLuint textureSamplerID;
 	GLuint programID;
+	GLuint normalBufferID;
 
 	GLuint shadowDepthMapID;     // Shadow depth map uniform location
 	GLuint lightSpaceMatrixID;
+	GLuint lightPositionID;
+	GLuint lightIntensityID;
 
 
 	// Initialize the Building2
 	void initialize(glm::vec3 position, glm::vec3 scale, GLuint texID, GLuint shaderID);
-	void render(glm::mat4 cameraMatrix, glm::mat4 lightSpaceMatrix, GLuint shadowDepthMap) const;
+	void render(glm::mat4 cameraMatrix, glm::mat4 lightSpaceMatrix, GLuint shadowDepthMap, glm::vec3 lightPosition, glm::vec3 lightIntensity) const;
 
 
 	// Clean up resources

@@ -173,6 +173,34 @@ const GLfloat Building2::uv_buffer_data[48] = {
 };
 // ---------------------------
 
+const GLfloat Building2::normal_buffer_data[72] = {
+	// Normal data (for simplicity, all normals are assumed to be unit vectors)
+	0.0f, 0.0f,  1.0f,
+	0.0f, 0.0f,  1.0f,
+	0.0f, 0.0f,  1.0f,
+	0.0f, 0.0f,  1.0f,
+	0.0f, 0.0f, -1.0f,
+	0.0f, 0.0f, -1.0f,
+	0.0f, 0.0f, -1.0f,
+	0.0f, 0.0f, -1.0f,
+	-1.0f, 0.0f,  0.0f,
+	-1.0f, 0.0f,  0.0f,
+	-1.0f, 0.0f,  0.0f,
+	-1.0f, 0.0f,  0.0f,
+	1.0f, 0.0f,  0.0f,
+	1.0f, 0.0f,  0.0f,
+	1.0f, 0.0f,  0.0f,
+	1.0f, 0.0f,  0.0f,
+	0.0f,  1.0f,  0.0f,
+	0.0f,  1.0f,  0.0f,
+	0.0f,  1.0f,  0.0f,
+	0.0f,  1.0f,  0.0f,
+	0.0f, -1.0f,  0.0f,
+	0.0f, -1.0f,  0.0f,
+	0.0f, -1.0f,  0.0f,
+	0.0f, -1.0f,  0.0f
+};
+
 // OpenGL buffers
 /*GLuint vertexArrayID;
 GLuint vertexBufferID;
@@ -206,6 +234,10 @@ void Building2::initialize(glm::vec3 position, glm::vec3 scale, GLuint texID, GL
     glBindBuffer(GL_ARRAY_BUFFER, colorBufferID);
     glBufferData(GL_ARRAY_BUFFER, sizeof(color_buffer_data), color_buffer_data, GL_STATIC_DRAW);
 
+	glGenBuffers(1, &normalBufferID);
+	glBindBuffer(GL_ARRAY_BUFFER, normalBufferID);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(normal_buffer_data), normal_buffer_data, GL_STATIC_DRAW);
+
     // Create modifiable UV buffer
     GLfloat modifiable_uv_buffer_data[48];
     memcpy(modifiable_uv_buffer_data, uv_buffer_data, sizeof(uv_buffer_data));
@@ -232,10 +264,12 @@ void Building2::initialize(glm::vec3 position, glm::vec3 scale, GLuint texID, GL
     // Get texture sampler location
     textureSamplerID = glGetUniformLocation(programID, "textureSampler");
 	shadowDepthMapID = glGetUniformLocation(programID, "shadowDepthMap");
+	lightPositionID = glGetUniformLocation(programID, "lightPosition");
+	lightIntensityID = glGetUniformLocation(programID, "lightIntensity");
 	lightSpaceMatrixID = glGetUniformLocation(programID, "lightSpaceMatrix");
 }
 
-void Building2::render(glm::mat4 cameraMatrix, glm::mat4 lightSpaceMatrix, GLuint shadowDepthMap) const {
+void Building2::render(glm::mat4 cameraMatrix, glm::mat4 lightSpaceMatrix, GLuint shadowDepthMap, glm::vec3 lightPosition, glm::vec3 lightIntensity) const {
 	glUseProgram(programID);
 
 	glEnableVertexAttribArray(0);
@@ -251,8 +285,8 @@ void Building2::render(glm::mat4 cameraMatrix, glm::mat4 lightSpaceMatrix, GLuin
 	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, 0);
 
 	glEnableVertexAttribArray(3);
-	glBindBuffer(GL_ARRAY_BUFFER, uvBufferID);
-	glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
+	glBindBuffer(GL_ARRAY_BUFFER, normalBufferID);
+	glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
 	std::cout << "Building2 Texture ID: " << textureID << std::endl;
 	// Bind the texture
@@ -279,14 +313,22 @@ void Building2::render(glm::mat4 cameraMatrix, glm::mat4 lightSpaceMatrix, GLuin
 	// Compute MVP matrix
 	glm::mat4 mvp = cameraMatrix * modelMatrix;
 	glUniformMatrix4fv(mvpMatrixID, 1, GL_FALSE, glm::value_ptr(mvp));
+	glm::mat4 lmap = lightSpaceMatrix;
+	glUniformMatrix4fv(lightSpaceMatrixID, 1, GL_FALSE, &lmap[0][0]);
 
 	// Draw the Building2
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBufferID);
 	glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, (void*)0);
 
+	// Set light data
+	glUniform3fv(lightPositionID, 1, &lightPosition[0]);
+	glUniform3fv(lightIntensityID, 1, &lightIntensity[0]);
+	glUniform1i(shadowDepthMapID, shadowDepthMap);
+
 	glDisableVertexAttribArray(0);
 	glDisableVertexAttribArray(1);
 	glDisableVertexAttribArray(2);
+	glDisableVertexAttribArray(3);
 }
 
 

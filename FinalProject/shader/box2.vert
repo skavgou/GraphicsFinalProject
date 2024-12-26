@@ -3,8 +3,9 @@
 // Input attributes
 layout(location = 0) in vec3 vertexPosition;
 layout(location = 1) in vec3 vertexColor;
-layout(location = 2) in vec3 vertexNormal;
-layout(location = 3) in vec2 vertexUV; // Texture coordinates
+layout(location = 2) in vec2 vertexUV; // Texture coordinates
+layout(location = 3) in vec3 vertexNormal;
+
 
 // Output data, to be interpolated for each fragment
 out vec3 color;
@@ -21,7 +22,8 @@ void main() {
 
     // Pass attributes to the fragment shader
     color = vertexColor;
-    worldPosition = vertexPosition;
+    vec4 tempPos = modelMatrix * vec4(vertexPosition, 1.0);
+    worldPosition = tempPos.xyz;
     worldNormal = vertexNormal;
     UV = vertexUV; // Pass UV coordinates
 }

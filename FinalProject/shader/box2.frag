@@ -41,6 +41,9 @@ void main()
     vec3 lightDir = normalize(lightPosition - worldPosition);
 
     float distance = length(lightPosition - worldPosition);
+    //finalColor = texColor; return;
+    //finalColor = worldNormal; return;
+    //finalColor = vec3(distance / 1000.0f); return;
     // Calculate the diffuse component using Lambert's cosine law
     float diff = max(dot(worldNormal, lightDir), 0.0) / pow(distance, 2);
 
@@ -54,7 +57,7 @@ void main()
     float shadowFactor = calculateShadow(shadowCoord);
 
     shadowFactor = (worldPosition.y >= lightPosition.y) ? 1.0 : shadowFactor;
-
+    //float shadowFactor = 1.0;
     // Clamp the final color to prevent excessively high values
     finalColor = diffuse / (1.0 + diffuse);
 

@@ -400,7 +400,7 @@ struct MyBot {
 
 	void initialize() {
 		// Modify your path if needed
-		if (!loadModel(model, "../FinalProject/model/Car/scene.gltf")) {
+		if (!loadModel(model, "../FinalProject/model/bot/bot.gltf")) {
 			return;
 		}
 
@@ -597,7 +597,8 @@ struct MyBot {
 	void cleanup() {
 		glDeleteProgram(programID);
 	}
-}; 
+};
+
 
 int main(void)
 {
@@ -692,6 +693,11 @@ int main(void)
 		// Swap buffers
 		glfwSwapBuffers(window);
 		glfwPollEvents();
+
+		if(playbackSpeed < 200.0f) {
+			playbackSpeed *= 1.000001f;
+		}
+
 
 	} // Check if the ESC key was pressed or the window was closed
 	while (!glfwWindowShouldClose(window));
