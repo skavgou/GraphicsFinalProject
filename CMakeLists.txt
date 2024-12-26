@@ -45,7 +45,7 @@ target_link_libraries(lab4_character
 add_executable(lab3_cornellbox
 		FinalProject/lab3_cornellbox.cpp
 		FinalProject/render/shader.cpp
-		FinalProject/Building.cpp
+		FinalProject/Building2.cpp
 )
 target_link_libraries(lab3_cornellbox
 		${OPENGL_LIBRARY}

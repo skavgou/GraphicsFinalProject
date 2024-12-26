@@ -4,7 +4,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <GL/gl.h>
 #include <cmath>
-#include <Building.h>
+#include <Building2.h>
 
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include <stb/stb_image_write.h>
@@ -18,6 +18,16 @@
 //#define STB_IMAGE_IMPLEMENTATION
 //#include <stb/stb_image.h>
 #define _USE_MATH_DEFINES
+
+GLuint boxShaderID;
+GLuint skyboxShaderID;
+GLuint skyboxTexID;
+GLuint buildingTex1;
+GLuint buildingTex2;
+GLuint buildingTex3;
+GLuint buildingTex4;
+GLuint buildingTex5;
+GLuint buildingTex6;
 
 static GLFWwindow *window;
 static int windowWidth = 1024;
@@ -280,7 +290,7 @@ struct CornellBox {
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(index_buffer_data), index_buffer_data, GL_STATIC_DRAW);
 
         // Create and compile our GLSL program from the shaders
-        programID = LoadShadersFromFile("../FinalProject/shader/box.vert", "../FinalProject/shader/box.frag");
+        programID = LoadShadersFromFile("../FinalProject/shader/box2.vert", "../FinalProject/shader/box2.frag");
         if (programID == 0)
         {
             std::cerr << "Failed to load shaders." << std::endl;
@@ -362,7 +372,7 @@ int main(void)
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     // Open a window and create its OpenGL context
-    window = glfwCreateWindow(windowWidth, windowHeight, "Building Scene", NULL, NULL);
+    window = glfwCreateWindow(windowWidth, windowHeight, "Building2 Scene", NULL, NULL);
     if (window == NULL)
     {
         std::cerr << "Failed to open a GLFW window." << std::endl;
@@ -394,6 +404,16 @@ int main(void)
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
 
+    buildingTex1 = LoadTextureTileBox("../FinalProject/Textures/facade1.jpg");
+    buildingTex2 = LoadTextureTileBox("../FinalProject/Textures/facade2.jpg");
+    buildingTex3 = LoadTextureTileBox("../FinalProject/Textures/facade3.jpg");
+    buildingTex4 = LoadTextureTileBox("../FinalProject/Textures/facade4.jpg");
+    buildingTex5 = LoadTextureTileBox("../FinalProject/Textures/facade5.jpg");
+    buildingTex6 = LoadTextureTileBox("../FinalProject/Textures/facade0.jpg");
+    skyboxTexID = LoadTextureTileBox("../FinalProject/Textures/sky.png");
+
+    boxShaderID = LoadShadersFromFile("../FinalProject/shader/box2.vert", "../FinalProject/shader/box2.frag");
+
     GLuint shadowFBO, shadowDepthTexture;
     glm::mat4 lightProjectionMatrix, lightViewMatrix, lightSpaceMatrix;
 
@@ -417,20 +437,20 @@ int main(void)
 	b.initialize();
 
     // Create buildings
-    std::vector<Building> buildings;
+    std::vector<Building2> buildings;
 
     // Initialize buildings to mimic the Cornell Boxes
-    Building b1;
-    b1.initialize(glm::vec3(-278.0f, 165.0f, 0.0f), glm::vec3(150.0f, 330.0f, 150.0f), 1);
+    Building2 b1;
+    b1.initialize(glm::vec3(-278.0f, 165.0f, 0.0f), glm::vec3(150.0f, 330.0f, 150.0f), buildingTex1, boxShaderID);
     //buildings.push_back(b1);
 
-    Building b2;
-    b2.initialize(glm::vec3(-160.0f, 82.5f, -150.0f), glm::vec3(82.0f, 165.0f, 82.0f), 2);
-    buildings.push_back(b2);
+    Building2 b2;
+    b2.initialize(glm::vec3(-160.0f, 82.5f, -150.0f), glm::vec3(82.0f, 165.0f, 82.0f), buildingTex2, boxShaderID);
+    //buildings.push_back(b2);
 
-    Building b3;
-    b3.initialize(glm::vec3(-278.0f, 330.0f, -278.0f), glm::vec3(150.0f, 330.0f, 150.0f), 3);
-    //buildings.push_back(b3);
+    Building2 b3;
+    b3.initialize(glm::vec3(-278.0f, 330.0f, -278.0f), glm::vec3(15.0f, 33.0f, 15.0f), buildingTex4, boxShaderID);
+    buildings.push_back(b3);
 
     // Camera setup
     glm::mat4 viewMatrix, projectionMatrix;
@@ -450,12 +470,14 @@ int main(void)
         lightViewMatrix = glm::lookAt(lightPosition, lightPosition + glm::vec3(0, -1, 0), lightUp);
         glm::mat4 lp = lightProjectionMatrix * lightViewMatrix;
 
+        b.render(lp, lp, shadowFBO);
+
         for (auto& building : buildings)
         {
             building.render(lp, lp, shadowFBO);
         }
 
-    	b.render(lp, lp, shadowFBO);
+
 
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
         glViewport(0, 0, windowWidth, windowHeight);
@@ -463,6 +485,7 @@ int main(void)
 
         glActiveTexture(GL_TEXTURE1); // Activate texture unit 1
         glBindTexture(GL_TEXTURE_2D, shadowDepthTexture);
+        glUniform1i(glGetUniformLocation(boxShaderID, "shadowDepthMap"), 1);
 
         // Main rendering pass
         viewMatrix = glm::lookAt(eye_center, lookat, up);

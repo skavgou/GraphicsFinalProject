@@ -145,8 +145,8 @@ build CMakeFiles/lab3_cornellbox.dir/FinalProject/render/shader.cpp.obj: CXX_COM
   OBJECT_DIR = CMakeFiles\lab3_cornellbox.dir
   OBJECT_FILE_DIR = CMakeFiles\lab3_cornellbox.dir\FinalProject\render
 
-build CMakeFiles/lab3_cornellbox.dir/FinalProject/Building.cpp.obj: CXX_COMPILER__lab3_cornellbox_unscanned_Debug C$:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/FinalProject/Building.cpp || cmake_object_order_depends_target_lab3_cornellbox
-  DEP_FILE = CMakeFiles\lab3_cornellbox.dir\FinalProject\Building.cpp.obj.d
+build CMakeFiles/lab3_cornellbox.dir/FinalProject/Building2.cpp.obj: CXX_COMPILER__lab3_cornellbox_unscanned_Debug C$:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/FinalProject/Building2.cpp || cmake_object_order_depends_target_lab3_cornellbox
+  DEP_FILE = CMakeFiles\lab3_cornellbox.dir\FinalProject\Building2.cpp.obj.d
   FLAGS = -g -std=gnu++11 -fdiagnostics-color=always
   INCLUDES = -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/stb -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glfw-3.1.2/include -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glm-0.9.7.1 -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glad-opengl-3.3/include -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/tinygltf-2.9.3 -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/FinalProject -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external -IC:/Users/Sean/Documents/GraphFinal/GraphicsFinalProject/external/glad-3.3/include
   OBJECT_DIR = CMakeFiles\lab3_cornellbox.dir
@@ -160,7 +160,7 @@ build CMakeFiles/lab3_cornellbox.dir/FinalProject/Building.cpp.obj: CXX_COMPILER
 #############################################
 # Link the executable lab3_cornellbox.exe
 
-build lab3_cornellbox.exe: CXX_EXECUTABLE_LINKER__lab3_cornellbox_Debug CMakeFiles/lab3_cornellbox.dir/FinalProject/lab3_cornellbox.cpp.obj CMakeFiles/lab3_cornellbox.dir/FinalProject/render/shader.cpp.obj CMakeFiles/lab3_cornellbox.dir/FinalProject/Building.cpp.obj | glfw3dll.a libglad.dll.a || glfw3.dll libglad.dll
+build lab3_cornellbox.exe: CXX_EXECUTABLE_LINKER__lab3_cornellbox_Debug CMakeFiles/lab3_cornellbox.dir/FinalProject/lab3_cornellbox.cpp.obj CMakeFiles/lab3_cornellbox.dir/FinalProject/render/shader.cpp.obj CMakeFiles/lab3_cornellbox.dir/FinalProject/Building2.cpp.obj | glfw3dll.a libglad.dll.a || glfw3.dll libglad.dll
   FLAGS = -g
   LINK_LIBRARIES = -lopengl32  -lglu32  glfw3dll.a  libglad.dll.a  -lopengl32  -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles\lab3_cornellbox.dir

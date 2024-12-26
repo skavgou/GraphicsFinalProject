@@ -229,9 +229,11 @@ void Building::initialize(glm::vec3 position, glm::vec3 scale, int texID, GLuint
 
     // Get texture sampler location
     textureSamplerID = glGetUniformLocation(programID, "textureSampler");
+	shadowDepthMapID = glGetUniformLocation(programID, "shadowDepthMap");
+	lightSpaceMatrixID = glGetUniformLocation(programID, "lightSpaceMatrix");
 }
 
-void Building::render(glm::mat4 cameraMatrix, glm::mat4* lightSpaceMatrix) const {
+void Building::render(glm::mat4 cameraMatrix, glm::mat4 lightSpaceMatrix, GLuint shadowDepthMap) const {
 	glUseProgram(programID);
 
 	glEnableVertexAttribArray(0);
@@ -242,37 +244,39 @@ void Building::render(glm::mat4 cameraMatrix, glm::mat4* lightSpaceMatrix) const
 	glBindBuffer(GL_ARRAY_BUFFER, colorBufferID);
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
-	if (!lightSpaceMatrix) {
-		// Enable UV buffer and texture sampler only for normal rendering
-		glEnableVertexAttribArray(2);
-		glBindBuffer(GL_ARRAY_BUFFER, uvBufferID);
-		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, 0);
+	glEnableVertexAttribArray(2);
+	glBindBuffer(GL_ARRAY_BUFFER, uvBufferID);
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, 0);
 
-		// Set texture sampler to use texture unit 0
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, textureID);
-		glUniform1i(textureSamplerID, 0);
-	}
+	// Bind the texture
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, textureID);
+	glUniform1i(textureSamplerID, 0);
+
+	// Bind the shadow map
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, shadowDepthMap);
+	glUniform1i(shadowDepthMapID, 1);
 
 	// Model transform
-	glm::mat4 modelMatrix = glm::mat4();
+	glm::mat4 modelMatrix = glm::mat4(1.0f);
 	modelMatrix = glm::translate(modelMatrix, position);
 	modelMatrix = glm::scale(modelMatrix, scale);
 
-	// Use the appropriate matrix
-	glm::mat4 mvp = lightSpaceMatrix ? (*lightSpaceMatrix) * modelMatrix : cameraMatrix * modelMatrix;
+	// Pass the MVP matrix and light-space matrix
+	glm::mat4 mvp = cameraMatrix * modelMatrix;
 	glUniformMatrix4fv(mvpMatrixID, 1, GL_FALSE, &mvp[0][0]);
+	glUniformMatrix4fv(lightSpaceMatrixID, 1, GL_FALSE, &lightSpaceMatrix[0][0]);
 
-	// Draw the box
+	// Draw the building
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBufferID);
 	glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, (void*)0);
 
 	glDisableVertexAttribArray(0);
 	glDisableVertexAttribArray(1);
-	if (!lightSpaceMatrix) {
-		glDisableVertexAttribArray(2);
-	}
+	glDisableVertexAttribArray(2);
 }
+
 
 
 void Building::cleanup() {

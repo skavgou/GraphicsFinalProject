@@ -494,7 +494,7 @@ struct MyBot {
 
 	void initialize() {
 		// Modify your path if needed
-		if (!loadModel(model, "../FinalProject/model/bot/bot.gltf")) {
+		if (!loadModel(model, "../FinalProject/model/car/scene.gltf")) {
 			return;
 		}
 

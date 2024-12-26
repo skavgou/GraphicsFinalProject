@@ -1,0 +1,11 @@
+Model Information:
+* title:	Flying-retro car
+* source:	https://sketchfab.com/3d-models/flying-retro-car-c31bf03c71a0466e9c46853d6875d355
+* author:	ErhensPrototype (https://sketchfab.com/ErhensPrototype)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Flying-retro car" (https://sketchfab.com/3d-models/flying-retro-car-c31bf03c71a0466e9c46853d6875d355) by ErhensPrototype (https://sketchfab.com/ErhensPrototype) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

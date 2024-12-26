@@ -43,11 +43,14 @@ struct Building {
     GLuint textureSamplerID;
     GLuint programID;
 
+    GLuint shadowDepthMapID;     // Shadow depth map uniform location
+    GLuint lightSpaceMatrixID;
+
+
     // Initialize the building
     void initialize(glm::vec3 position, glm::vec3 scale, int texID, GLuint shaderID);
+    void render(glm::mat4 cameraMatrix, glm::mat4 lightSpaceMatrix, GLuint shadowDepthMap) const;
 
-    // Render the building
-    void render(glm::mat4 cameraMatrix, glm::mat4* lightSpaceMatrix = nullptr) const;
 
     // Clean up resources
     void cleanup();
